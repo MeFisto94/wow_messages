@@ -255,8 +255,6 @@ pub(crate) mod allowed_class;
 pub use allowed_class::*;
 pub(crate) mod allowed_race;
 pub use allowed_race::*;
-pub(crate) mod aura_flag;
-pub use aura_flag::*;
 pub use crate::shared::bag_family_tbc_wrath::*;
 pub use crate::shared::billing_plan_flags_tbc_wrath::*;
 pub(crate) mod cast_flags;

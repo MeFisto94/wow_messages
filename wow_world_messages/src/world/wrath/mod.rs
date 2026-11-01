@@ -132,8 +132,6 @@ pub use auction_list_item::*;
 pub use crate::shared::auction_sort_tbc_wrath::*;
 pub(crate) mod aura_log;
 pub use aura_log::*;
-pub(crate) mod aura_update;
-pub use aura_update::*;
 pub use crate::shared::bank_tab_tbc_wrath::*;
 pub use crate::shared::battleground_player_position_vanilla_tbc_wrath::*;
 pub(crate) mod calendar_invitee;

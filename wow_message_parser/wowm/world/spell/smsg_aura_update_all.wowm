@@ -1,39 +1,12 @@
-flag AuraFlag : u8 {
-    EMPTY			= 0x0;
-    EFFECT_1		= 0x1;
-    EFFECT_2		= 0x2;
-    EFFECT_3		= 0x4;
-    NOT_CASTER	= 0x8;
-    SET			= 0x9;
-    CANCELLABLE	= 0x10;
-    DURATION		= 0x20;
-    /// Seems to hide the aura and tell client the aura was removed
-    HIDE			= 0x40;
-    NEGATIVE		= 0x80;
-} {
-     versions = "3.3.5";
-}
-
-struct AuraUpdate {
-    u8 visual_slot;
-    Spell spell;
-    AuraFlag flags;
-    Level level;
-    u8 aura_stack_count;
-    if (flags & NOT_CASTER) {
-        PackedGuid caster;
-    }
-    if (flags & DURATION) {
-        u32 duration;
-        u32 time_left;
-    }
-} {
-     versions = "3.3.5";
-}
-
 smsg SMSG_AURA_UPDATE_ALL = 0x0495 {
     PackedGuid unit;
-    AuraUpdate[-] aura_updates;
+    /// One entry per slot, in a layout this language cannot state, so left to the reader.
+    /// Each is the slot (`u8`) and the spell (`u32`). A spell of zero is an empty slot and ends the
+    /// entry. Otherwise the flags (`u8`), the caster level (`u8`) and the stack count (`u8`) follow,
+    /// then the caster as a packed guid only when the flags do not have `0x08` (self cast), then the
+    /// full and the remaining duration (`i32` each, in milliseconds) when they have `0x20` (duration).
+    /// TrinityCore: `AuraDataInfo` and `AuraInfo` in `SpellPackets.cpp`.
+    u8[-] auras;
 } {
     versions = "3.3.5";
 }

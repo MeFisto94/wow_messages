@@ -1,22 +1,24 @@
 use std::io::{Read, Write};
 
 use crate::Guid;
-use crate::shared::level_vanilla_tbc_wrath::Level;
-use crate::wrath::{
-    AuraFlag, AuraUpdate,
-};
 
-/// Auto generated from the original `wowm` in file [`wow_message_parser/wowm/world/spell/smsg_aura_update_all.wowm:34`](https://github.com/gtker/wow_messages/tree/main/wow_message_parser/wowm/world/spell/smsg_aura_update_all.wowm#L34):
+/// Auto generated from the original `wowm` in file [`wow_message_parser/wowm/world/spell/smsg_aura_update_all.wowm:1`](https://github.com/gtker/wow_messages/tree/main/wow_message_parser/wowm/world/spell/smsg_aura_update_all.wowm#L1):
 /// ```text
 /// smsg SMSG_AURA_UPDATE_ALL = 0x0495 {
 ///     PackedGuid unit;
-///     AuraUpdate[-] aura_updates;
+///     u8[-] auras;
 /// }
 /// ```
 #[derive(Debug, Clone, PartialEq, Eq, Hash, PartialOrd, Ord, Default)]
 pub struct SMSG_AURA_UPDATE_ALL {
     pub unit: Guid,
-    pub aura_updates: Vec<AuraUpdate>,
+    /// One entry per slot, in a layout this language cannot state, so left to the reader.
+    /// Each is the slot (`u8`) and the spell (`u32`). A spell of zero is an empty slot and ends the
+    /// entry. Otherwise the flags (`u8`), the caster level (`u8`) and the stack count (`u8`) follow,
+    /// then the caster as a packed guid only when the flags do not have `0x08` (self cast), then the
+    /// full and the remaining duration (`i32` each, in milliseconds) when they have `0x20` (duration).
+    /// TrinityCore: `AuraDataInfo` and `AuraInfo` in `SpellPackets.cpp`.
+    pub auras: Vec<u8>,
 }
 
 impl crate::private::Sealed for SMSG_AURA_UPDATE_ALL {}
@@ -29,23 +31,22 @@ impl SMSG_AURA_UPDATE_ALL {
         // unit: PackedGuid
         let unit = crate::util::read_packed_guid(&mut r)?;
 
-        // aura_updates: AuraUpdate[-]
-        let aura_updates = {
+        // auras: u8[-]
+        let auras = {
             let mut current_size = {
                 crate::util::packed_guid_size(&unit) // unit: PackedGuid
             };
-            let mut aura_updates = Vec::with_capacity(body_size as usize - current_size);
+            let mut auras = Vec::with_capacity(body_size as usize - current_size);
             while current_size < (body_size as usize) {
-                let a = AuraUpdate::read(&mut r)?;
-                current_size += a.size();
-                aura_updates.push(a);
+                auras.push(crate::util::read_u8_le(&mut r)?);
+                current_size += 1;
             }
-            aura_updates
+            auras
         };
 
         Ok(Self {
             unit,
-            aura_updates,
+            auras,
         })
     }
 
@@ -69,26 +70,9 @@ impl crate::Message for SMSG_AURA_UPDATE_ALL {
         writeln!(s, "test SMSG_AURA_UPDATE_ALL {{").unwrap();
         // Members
         writeln!(s, "    unit = {};", self.unit.guid()).unwrap();
-        writeln!(s, "    aura_updates = [").unwrap();
-        for v in self.aura_updates.as_slice() {
-            writeln!(s, "        {{").unwrap();
-            // Members
-            writeln!(s, "            visual_slot = {};", v.visual_slot).unwrap();
-            writeln!(s, "            spell = {};", v.spell).unwrap();
-            writeln!(s, "            flags = {};", AuraFlag::new(v.flags.as_int()).as_test_case_value()).unwrap();
-            writeln!(s, "            level = {};", v.level.as_int()).unwrap();
-            writeln!(s, "            aura_stack_count = {};", v.aura_stack_count).unwrap();
-            if let Some(if_statement) = &v.flags.get_not_caster() {
-                writeln!(s, "            caster = {};", if_statement.caster.guid()).unwrap();
-            }
-
-            if let Some(if_statement) = &v.flags.get_duration() {
-                writeln!(s, "            duration = {};", if_statement.duration).unwrap();
-                writeln!(s, "            time_left = {};", if_statement.time_left).unwrap();
-            }
-
-
-            writeln!(s, "        }},").unwrap();
+        writeln!(s, "    auras = [").unwrap();
+        for v in self.auras.as_slice() {
+            write!(s, "{v:#04X}, ").unwrap();
         }
         writeln!(s, "    ];").unwrap();
 
@@ -103,28 +87,7 @@ impl crate::Message for SMSG_AURA_UPDATE_ALL {
         let mut bytes = bytes.into_iter();
 
         crate::util::write_bytes(&mut s, &mut bytes, crate::util::packed_guid_size(&self.unit), "unit", "    ");
-        if !self.aura_updates.is_empty() {
-            writeln!(s, "    /* aura_updates: AuraUpdate[-] start */").unwrap();
-            for (i, v) in self.aura_updates.iter().enumerate() {
-                writeln!(s, "    /* aura_updates: AuraUpdate[-] {i} start */").unwrap();
-                crate::util::write_bytes(&mut s, &mut bytes, 1, "visual_slot", "        ");
-                crate::util::write_bytes(&mut s, &mut bytes, 4, "spell", "        ");
-                crate::util::write_bytes(&mut s, &mut bytes, 1, "flags", "        ");
-                crate::util::write_bytes(&mut s, &mut bytes, 1, "level", "        ");
-                crate::util::write_bytes(&mut s, &mut bytes, 1, "aura_stack_count", "        ");
-                if let Some(if_statement) = &v.flags.get_not_caster() {
-                    crate::util::write_bytes(&mut s, &mut bytes, crate::util::packed_guid_size(&if_statement.caster), "caster", "        ");
-                }
-
-                if let Some(if_statement) = &v.flags.get_duration() {
-                    crate::util::write_bytes(&mut s, &mut bytes, 4, "duration", "        ");
-                    crate::util::write_bytes(&mut s, &mut bytes, 4, "time_left", "        ");
-                }
-
-                writeln!(s, "    /* aura_updates: AuraUpdate[-] {i} end */").unwrap();
-            }
-            writeln!(s, "    /* aura_updates: AuraUpdate[-] end */").unwrap();
-        }
+        crate::util::write_bytes(&mut s, &mut bytes, self.auras.len(), "auras", "    ");
 
 
         writeln!(s, "] {{").unwrap();
@@ -142,9 +105,9 @@ impl crate::Message for SMSG_AURA_UPDATE_ALL {
         // unit: PackedGuid
         crate::util::write_packed_guid(&self.unit, &mut w)?;
 
-        // aura_updates: AuraUpdate[-]
-        for i in self.aura_updates.iter() {
-            i.write_into_vec(&mut w)?;
+        // auras: u8[-]
+        for i in self.auras.iter() {
+            w.write_all(&i.to_le_bytes())?;
         }
 
         Ok(())
@@ -162,7 +125,7 @@ impl crate::wrath::ServerMessage for SMSG_AURA_UPDATE_ALL {}
 impl SMSG_AURA_UPDATE_ALL {
     pub(crate) fn size(&self) -> usize {
         crate::util::packed_guid_size(&self.unit) // unit: PackedGuid
-        + self.aura_updates.iter().fold(0, |acc, x| acc + x.size()) // aura_updates: AuraUpdate[-]
+        + self.auras.len() * core::mem::size_of::<u8>() // auras: u8[-]
     }
 }
 

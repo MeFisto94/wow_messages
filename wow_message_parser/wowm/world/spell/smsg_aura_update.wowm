@@ -1,6 +1,7 @@
 smsg SMSG_AURA_UPDATE = 0x0496 {
     PackedGuid unit;
-    AuraUpdate aura_update;
+    /// The same entries as `SMSG_AURA_UPDATE_ALL`, usually one.
+    u8[-] auras;
 } {
     versions = "3.3.5";
 }
