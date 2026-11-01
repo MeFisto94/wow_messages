@@ -994,7 +994,7 @@ pub use smsg_spellnonmeleedamagelog::*;
 pub use crate::shared::smsg_spellordamage_immune_vanilla_tbc_wrath::*;
 pub(crate) mod smsg_spell_cooldown;
 pub use smsg_spell_cooldown::*;
-pub use crate::shared::smsg_spell_delayed_vanilla_tbc_wrath::*;
+pub use crate::shared::smsg_spell_delayed_vanilla_tbc::*;
 pub use crate::shared::smsg_spell_failed_other_vanilla_tbc_wrath::*;
 pub(crate) mod smsg_spell_failure;
 pub use smsg_spell_failure::*;

@@ -511992,8 +511992,8 @@
         },
         "sizes": {
           "constant_sized": false,
-          "minimum_size": 7,
-          "maximum_size": 15
+          "minimum_size": 6,
+          "maximum_size": 14
         },
         "members": [
           {
@@ -512055,21 +512055,6 @@
               "used_as_size_in": null,
               "size_of_fields_before_size": null,
               "used_in_if": true,
-              "tags": {}
-            }
-          },
-          {
-            "struct_member_tag": "Definition",
-            "struct_member_content": {
-              "name": "multiple_casts",
-              "data_type": {
-                "data_type_tag": "Bool",
-                "integer_type": "U8"
-              },
-              "constant_value": null,
-              "used_as_size_in": null,
-              "size_of_fields_before_size": null,
-              "used_in_if": false,
               "tags": {}
             }
           },
@@ -512829,11 +512814,83 @@
             }
           }
         },
-        "tests": [],
+        "tests": [
+          {
+            "subject": "SMSG_CAST_FAILED",
+            "members": [
+              {
+                "variable_name": "cast_count",
+                "value": {
+                  "test_value_tag": "Integer",
+                  "content": {
+                    "value": "3",
+                    "original_string": "3"
+                  }
+                },
+                "tags": {}
+              },
+              {
+                "variable_name": "id",
+                "value": {
+                  "test_value_tag": "Integer",
+                  "content": {
+                    "value": "686",
+                    "original_string": "686"
+                  }
+                },
+                "tags": {}
+              },
+              {
+                "variable_name": "result",
+                "value": {
+                  "test_value_tag": "Enum",
+                  "content": {
+                    "value": "97",
+                    "original_string": "OUT_OF_RANGE"
+                  }
+                },
+                "tags": {}
+              }
+            ],
+            "raw_bytes": [
+              0,
+              8,
+              48,
+              1,
+              3,
+              174,
+              2,
+              0,
+              0,
+              97
+            ],
+            "tags": {
+              "version": {
+                "version_type_tag": "world",
+                "version_type": {
+                  "world_version_tag": "specific",
+                  "versions": [
+                    {
+                      "major": 3,
+                      "minor": 3,
+                      "patch": 5,
+                      "build": null
+                    }
+                  ]
+                }
+              }
+            },
+            "file_info": {
+              "file_name": "wow_message_parser/wowm/world/spell/smsg_cast_failed.wowm",
+              "start_position": 78,
+              "end_position": 90
+            }
+          }
+        ],
         "file_info": {
           "file_name": "wow_message_parser/wowm/world/spell/smsg_cast_failed.wowm",
           "start_position": 26,
-          "end_position": 77
+          "end_position": 76
         },
         "only_has_io_error": false,
         "has_manual_size_field": false,
@@ -512988,11 +513045,6 @@
             "is_elseif_flag": false,
             "enum_part_of_separate_statements": false,
             "definer_type": "Enum"
-          },
-          {
-            "name": "multiple_casts",
-            "is_elseif_flag": false,
-            "enum_part_of_separate_statements": false
           }
         ],
         "optional": null
@@ -562543,12 +562595,6 @@
                   "minor": null,
                   "patch": null,
                   "build": null
-                },
-                {
-                  "major": 3,
-                  "minor": null,
-                  "patch": null,
-                  "build": null
                 }
               ]
             }
@@ -562557,8 +562603,150 @@
         "tests": [],
         "file_info": {
           "file_name": "wow_message_parser/wowm/world/spell/smsg_spell_delayed.wowm",
-          "start_position": 3,
-          "end_position": 8
+          "start_position": 1,
+          "end_position": 6
+        },
+        "only_has_io_error": true,
+        "has_manual_size_field": false,
+        "manual_size_subtraction": null,
+        "prepared_objects": [
+          {
+            "name": "guid",
+            "is_elseif_flag": false,
+            "enum_part_of_separate_statements": false
+          },
+          {
+            "name": "delay_time",
+            "is_elseif_flag": false,
+            "enum_part_of_separate_statements": false
+          }
+        ],
+        "optional": null
+      },
+      {
+        "name": "SMSG_SPELL_DELAYED",
+        "object_type": {
+          "container_type_tag": "SMsg",
+          "opcode": 482
+        },
+        "sizes": {
+          "constant_sized": false,
+          "minimum_size": 5,
+          "maximum_size": 13
+        },
+        "members": [
+          {
+            "struct_member_tag": "Definition",
+            "struct_member_content": {
+              "name": "guid",
+              "data_type": {
+                "data_type_tag": "PackedGuid"
+              },
+              "constant_value": null,
+              "used_as_size_in": null,
+              "size_of_fields_before_size": null,
+              "used_in_if": false,
+              "tags": {}
+            }
+          },
+          {
+            "struct_member_tag": "Definition",
+            "struct_member_content": {
+              "name": "delay_time",
+              "data_type": {
+                "data_type_tag": "Integer",
+                "integer_type": "U32"
+              },
+              "constant_value": null,
+              "used_as_size_in": null,
+              "size_of_fields_before_size": null,
+              "used_in_if": false,
+              "tags": {}
+            }
+          }
+        ],
+        "tags": {
+          "version": {
+            "version_type_tag": "world",
+            "version_type": {
+              "world_version_tag": "specific",
+              "versions": [
+                {
+                  "major": 3,
+                  "minor": 3,
+                  "patch": 5,
+                  "build": null
+                }
+              ]
+            }
+          }
+        },
+        "tests": [
+          {
+            "subject": "SMSG_SPELL_DELAYED",
+            "members": [
+              {
+                "variable_name": "guid",
+                "value": {
+                  "test_value_tag": "Guid",
+                  "content": {
+                    "value": "2",
+                    "original_string": "2"
+                  }
+                },
+                "tags": {}
+              },
+              {
+                "variable_name": "delay_time",
+                "value": {
+                  "test_value_tag": "Integer",
+                  "content": {
+                    "value": "500",
+                    "original_string": "500"
+                  }
+                },
+                "tags": {}
+              }
+            ],
+            "raw_bytes": [
+              0,
+              8,
+              226,
+              1,
+              1,
+              2,
+              244,
+              1,
+              0,
+              0
+            ],
+            "tags": {
+              "version": {
+                "version_type_tag": "world",
+                "version_type": {
+                  "world_version_tag": "specific",
+                  "versions": [
+                    {
+                      "major": 3,
+                      "minor": 3,
+                      "patch": 5,
+                      "build": null
+                    }
+                  ]
+                }
+              }
+            },
+            "file_info": {
+              "file_name": "wow_message_parser/wowm/world/spell/smsg_spell_delayed.wowm",
+              "start_position": 15,
+              "end_position": 25
+            }
+          }
+        ],
+        "file_info": {
+          "file_name": "wow_message_parser/wowm/world/spell/smsg_spell_delayed.wowm",
+          "start_position": 8,
+          "end_position": 13
         },
         "only_has_io_error": true,
         "has_manual_size_field": false,

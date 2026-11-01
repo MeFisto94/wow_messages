@@ -27,7 +27,6 @@ smsg SMSG_CAST_FAILED = 0x0130 {
     u8 cast_count;
     Spell id;
     SpellCastResult result;
-    Bool multiple_casts;
     if (result == REQUIRES_SPELL_FOCUS) {
          u32 spell_focus;
     }
@@ -73,5 +72,19 @@ smsg SMSG_CAST_FAILED = 0x0130 {
         u32 fishing_skill_required;
     }
 } {
+    versions = "3.3.5";
+}
+
+test SMSG_CAST_FAILED {
+    cast_count = 3;
+    id = 686;
+    result = OUT_OF_RANGE;
+} [
+    0x00, 0x08, /* size */
+    0x30, 0x01, /* opcode */
+    0x03, /* cast_count */
+    0xAE, 0x02, 0x00, 0x00, /* id */
+    0x61, /* result */
+] {
     versions = "3.3.5";
 }

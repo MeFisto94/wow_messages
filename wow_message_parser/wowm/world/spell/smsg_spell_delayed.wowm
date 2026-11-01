@@ -1,7 +1,25 @@
-#tag_all versions "1 2 3";
-
 smsg SMSG_SPELL_DELAYED = 0x01E2 {
     Guid guid;
     u32 delay_time;
+} {
+    versions = "1 2";
 }
 
+smsg SMSG_SPELL_DELAYED = 0x01E2 {
+    PackedGuid guid;
+    u32 delay_time;
+} {
+    versions = "3.3.5";
+}
+
+test SMSG_SPELL_DELAYED {
+    guid = 2;
+    delay_time = 500;
+} [
+    0x00, 0x08, /* size */
+    0xE2, 0x01, /* opcode */
+    0x01, 0x02, /* guid */
+    0xF4, 0x01, 0x00, 0x00, /* delay_time */
+] {
+    versions = "3.3.5";
+}

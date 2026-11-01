@@ -90,7 +90,6 @@ smsg SMSG_CAST_FAILED = 0x0130 {
     u8 cast_count;
     Spell id;
     SpellCastResult result;
-    Bool multiple_casts;
     if (result == REQUIRES_SPELL_FOCUS) {
         u32 spell_focus;
     }
@@ -155,7 +154,6 @@ SMSG have a header of 4 bytes.
 | - | 1 / - | u8 | cast_count |  |
 | - | 4 / Little | Spell | id |  |
 | - | 1 / - | [SpellCastResult](spellcastresult.md) | result |  |
-| - | 1 / - | Bool | multiple_casts |  |
 
 If result is equal to `REQUIRES_SPELL_FOCUS`:
 
@@ -240,3 +238,14 @@ Else If result is equal to `FISHING_TOO_LOW`:
 | ------ | ----------------- | ---- | ---- | ------- |
 | - | 4 / Little | u32 | fishing_skill_required |  |
 
+### Examples
+
+#### Example 1
+
+```c
+0, 8, // size
+48, 1, // opcode (304)
+3, // cast_count: u8
+174, 2, 0, 0, // id: Spell
+97, // result: SpellCastResult OUT_OF_RANGE (0x61)
+```

@@ -2,7 +2,7 @@ use std::io::{Read, Write};
 
 use crate::Guid;
 
-/// Auto generated from the original `wowm` in file [`wow_message_parser/wowm/world/spell/smsg_spell_delayed.wowm:3`](https://github.com/gtker/wow_messages/tree/main/wow_message_parser/wowm/world/spell/smsg_spell_delayed.wowm#L3):
+/// Auto generated from the original `wowm` in file [`wow_message_parser/wowm/world/spell/smsg_spell_delayed.wowm:1`](https://github.com/gtker/wow_messages/tree/main/wow_message_parser/wowm/world/spell/smsg_spell_delayed.wowm#L1):
 /// ```text
 /// smsg SMSG_SPELL_DELAYED = 0x01E2 {
 ///     Guid guid;
@@ -71,7 +71,7 @@ impl crate::Message for SMSG_SPELL_DELAYED {
 
 
         writeln!(s, "] {{").unwrap();
-        writeln!(s, "    versions = \"{}\";", std::env::var("WOWM_TEST_CASE_WORLD_VERSION").unwrap_or("1 2 3".to_string())).unwrap();
+        writeln!(s, "    versions = \"{}\";", std::env::var("WOWM_TEST_CASE_WORLD_VERSION").unwrap_or("1 2".to_string())).unwrap();
         writeln!(s, "}}\n").unwrap();
 
         Some(s)
@@ -102,7 +102,4 @@ impl crate::vanilla::ServerMessage for SMSG_SPELL_DELAYED {}
 
 #[cfg(feature = "tbc")]
 impl crate::tbc::ServerMessage for SMSG_SPELL_DELAYED {}
-
-#[cfg(feature = "wrath")]
-impl crate::wrath::ServerMessage for SMSG_SPELL_DELAYED {}
 
