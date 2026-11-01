@@ -10172,8 +10172,6 @@ Used in:
 * [SMSG_EXPLORATION_EXPERIENCE](smsg_exploration_experience.md)
 * [SMSG_INIT_WORLD_STATES](smsg_init_world_states.md)
 * [SMSG_ITEM_QUERY_SINGLE_RESPONSE](smsg_item_query_single_response.md)
-* [SMSG_PARTY_MEMBER_STATS](smsg_party_member_stats.md)
-* [SMSG_PARTY_MEMBER_STATS_FULL](smsg_party_member_stats_full.md)
 * [SMSG_PET_CAST_FAILED](smsg_pet_cast_failed.md)
 * [SMSG_PLAYERBOUND](smsg_playerbound.md)
 * [SMSG_SUMMON_REQUEST](smsg_summon_request.md)

@@ -149,7 +149,8 @@ smsg SMSG_PARTY_MEMBER_STATS = 0x007E {
     PackedGuid guid;
     GroupUpdateFlags mask;
     if (mask & STATUS) {
-        GroupMemberOnlineStatus status;       
+        /// `GroupMemberOnlineStatus` bits, written as a u16. TrinityCore: `uint16(playerStatus)`.
+        u16 status;
     }
     if (mask & CUR_HP) {
         u32 current_health;
@@ -170,7 +171,8 @@ smsg SMSG_PARTY_MEMBER_STATS = 0x007E {
         Level16 level;
     }
     if (mask & ZONE) {
-        Area area;
+        /// TrinityCore: `uint16(GetZoneId())`.
+        u16 zone;
     }
     if (mask & POSITION) {
         /// cmangos: float cast to u16
@@ -224,3 +226,24 @@ struct Aura {
     rust_base_type = "true";
 }
 
+test SMSG_PARTY_MEMBER_STATS {
+    guid = 6;
+    mask = STATUS | CUR_HP | MAX_HP | LEVEL | ZONE;
+    status = 5;
+    current_health = 120;
+    max_health = 400;
+    level = 12;
+    zone = 12;
+} [
+    0x00, 0x16, /* size */
+    0x7E, 0x00, /* opcode */
+    0x01, 0x06, /* guid */
+    0xC7, 0x00, 0x00, 0x00, /* mask */
+    0x05, 0x00, /* status: online and dead */
+    0x78, 0x00, 0x00, 0x00, /* current_health */
+    0x90, 0x01, 0x00, 0x00, /* max_health */
+    0x0C, 0x00, /* level */
+    0x0C, 0x00, /* zone */
+] {
+    versions = "3.3.5";
+}

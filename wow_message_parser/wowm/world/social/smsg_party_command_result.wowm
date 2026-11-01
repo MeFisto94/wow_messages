@@ -53,6 +53,36 @@ smsg SMSG_PARTY_COMMAND_RESULT = 0x007F {
     }
     (u32)PartyResult result;
 } {
-    paste_versions = "2.4.3 3";
+    paste_versions = "2.4.3";
+}
+
+smsg SMSG_PARTY_COMMAND_RESULT = 0x007F {
+    /// TrinityCore's `PartyOperation`, which has an uninvite (1) and a swap (4) as well.
+    u32 operation;
+    CString member {
+        maximum_length = "48";
+    }
+    /// TrinityCore's `PartyResult`, which goes on past 13.
+    u32 result;
+    /// TrinityCore: "LFD cooldown related".
+    u32 lfd_cooldown;
+} {
+    versions = "3.3.5";
+}
+
+test SMSG_PARTY_COMMAND_RESULT {
+    operation = 0;
+    member = "Thrall";
+    result = 0;
+    lfd_cooldown = 0;
+} [
+    0x00, 0x15, /* size */
+    0x7F, 0x00, /* opcode */
+    0x00, 0x00, 0x00, 0x00, /* operation */
+    0x54, 0x68, 0x72, 0x61, 0x6C, 0x6C, 0x00, /* member */
+    0x00, 0x00, 0x00, 0x00, /* result */
+    0x00, 0x00, 0x00, 0x00, /* lfd_cooldown */
+] {
+    versions = "3.3.5";
 }
 

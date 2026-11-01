@@ -12065,8 +12065,6 @@ impl ServerOpcodeMessage {
             Self::SMSG_GROUP_SET_LEADER(c) => crate::Message::to_test_case_string(c.as_ref()),
             Self::SMSG_GROUP_DESTROYED => crate::Message::to_test_case_string(&SMSG_GROUP_DESTROYED{}),
             Self::SMSG_GROUP_LIST(c) => crate::Message::to_test_case_string(c.as_ref()),
-            Self::SMSG_PARTY_MEMBER_STATS(c) => crate::Message::to_test_case_string(c.as_ref()),
-            Self::SMSG_PARTY_COMMAND_RESULT(c) => crate::Message::to_test_case_string(c.as_ref()),
             Self::SMSG_GUILD_INVITE(c) => crate::Message::to_test_case_string(c.as_ref()),
             Self::SMSG_GUILD_DECLINE(c) => crate::Message::to_test_case_string(c.as_ref()),
             Self::SMSG_GUILD_INFO(c) => crate::Message::to_test_case_string(c.as_ref()),

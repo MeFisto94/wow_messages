@@ -3,16 +3,17 @@ use std::io::{Read, Write};
 use crate::Guid;
 use crate::shared::level_vanilla_tbc_wrath::Level;
 use crate::wrath::{
-    Area, AuraMask, GroupMemberOnlineStatus, GroupUpdateFlags, Power,
+    AuraMask, GroupUpdateFlags, Power,
 };
 
 /// Auto generated from the original `wowm` in file [`wow_message_parser/wowm/world/social/smsg_party_member_stats_full.wowm:137`](https://github.com/gtker/wow_messages/tree/main/wow_message_parser/wowm/world/social/smsg_party_member_stats_full.wowm#L137):
 /// ```text
 /// smsg SMSG_PARTY_MEMBER_STATS_FULL = 0x02F2 {
+///     u8 unknown;
 ///     PackedGuid guid;
 ///     GroupUpdateFlags mask;
 ///     if (mask & STATUS) {
-///         GroupMemberOnlineStatus status;
+///         u16 status;
 ///     }
 ///     if (mask & CUR_HP) {
 ///         u32 current_health;
@@ -33,7 +34,7 @@ use crate::wrath::{
 ///         Level16 level;
 ///     }
 ///     if (mask & ZONE) {
-///         Area area;
+///         u16 zone;
 ///     }
 ///     if (mask & POSITION) {
 ///         u16 position_x;
@@ -76,6 +77,8 @@ use crate::wrath::{
 /// ```
 #[derive(Debug, Clone, PartialEq, Eq, Hash, PartialOrd, Ord, Default)]
 pub struct SMSG_PARTY_MEMBER_STATS_FULL {
+    /// TrinityCore: "only for SMSG_PARTY_MEMBER_STATS_FULL, probably arena/bg related".
+    pub unknown: u8,
     pub guid: Guid,
     pub mask: SMSG_PARTY_MEMBER_STATS_FULL_GroupUpdateFlags,
 }
@@ -83,9 +86,12 @@ pub struct SMSG_PARTY_MEMBER_STATS_FULL {
 impl crate::private::Sealed for SMSG_PARTY_MEMBER_STATS_FULL {}
 impl SMSG_PARTY_MEMBER_STATS_FULL {
     fn read_inner(mut r: &mut &[u8], body_size: u32) -> Result<Self, crate::errors::ParseErrorKind> {
-        if !(5..=584).contains(&body_size) {
+        if !(6..=584).contains(&body_size) {
             return Err(crate::errors::ParseErrorKind::InvalidSize);
         }
+
+        // unknown: u8
+        let unknown = crate::util::read_u8_le(&mut r)?;
 
         // guid: PackedGuid
         let guid = crate::util::read_packed_guid(&mut r)?;
@@ -94,8 +100,8 @@ impl SMSG_PARTY_MEMBER_STATS_FULL {
         let mask = GroupUpdateFlags::new(crate::util::read_u32_le(&mut r)?);
 
         let mask_status = if mask.is_status() {
-            // status: GroupMemberOnlineStatus
-            let status = GroupMemberOnlineStatus::new(crate::util::read_u8_le(&mut r)?);
+            // status: u16
+            let status = crate::util::read_u16_le(&mut r)?;
 
             Some(SMSG_PARTY_MEMBER_STATS_FULL_GroupUpdateFlags_Status {
                 status,
@@ -178,11 +184,11 @@ impl SMSG_PARTY_MEMBER_STATS_FULL {
         };
 
         let mask_zone = if mask.is_zone() {
-            // area: Area
-            let area = crate::util::read_u32_le(&mut r)?.try_into()?;
+            // zone: u16
+            let zone = crate::util::read_u16_le(&mut r)?;
 
             Some(SMSG_PARTY_MEMBER_STATS_FULL_GroupUpdateFlags_Zone {
-                area,
+                zone,
             })
         }
         else {
@@ -365,6 +371,7 @@ impl SMSG_PARTY_MEMBER_STATS_FULL {
         };
 
         Ok(Self {
+            unknown,
             guid,
             mask,
         })
@@ -389,10 +396,11 @@ impl crate::Message for SMSG_PARTY_MEMBER_STATS_FULL {
 
         writeln!(s, "test SMSG_PARTY_MEMBER_STATS_FULL {{").unwrap();
         // Members
+        writeln!(s, "    unknown = {};", self.unknown).unwrap();
         writeln!(s, "    guid = {};", self.guid.guid()).unwrap();
         writeln!(s, "    mask = {};", GroupUpdateFlags::new(self.mask.as_int()).as_test_case_value()).unwrap();
         if let Some(if_statement) = &self.mask.get_status() {
-            writeln!(s, "    status = {};", if_statement.status.as_test_case_value()).unwrap();
+            writeln!(s, "    status = {};", if_statement.status).unwrap();
         }
 
         if let Some(if_statement) = &self.mask.get_cur_hp() {
@@ -420,7 +428,7 @@ impl crate::Message for SMSG_PARTY_MEMBER_STATS_FULL {
         }
 
         if let Some(if_statement) = &self.mask.get_zone() {
-            writeln!(s, "    area = {};", if_statement.area.as_test_case_value()).unwrap();
+            writeln!(s, "    zone = {};", if_statement.zone).unwrap();
         }
 
         if let Some(if_statement) = &self.mask.get_position() {
@@ -483,10 +491,11 @@ impl crate::Message for SMSG_PARTY_MEMBER_STATS_FULL {
         self.write_into_vec(&mut bytes).unwrap();
         let mut bytes = bytes.into_iter();
 
+        crate::util::write_bytes(&mut s, &mut bytes, 1, "unknown", "    ");
         crate::util::write_bytes(&mut s, &mut bytes, crate::util::packed_guid_size(&self.guid), "guid", "    ");
         crate::util::write_bytes(&mut s, &mut bytes, 4, "mask", "    ");
         if let Some(if_statement) = &self.mask.get_status() {
-            crate::util::write_bytes(&mut s, &mut bytes, 1, "status", "    ");
+            crate::util::write_bytes(&mut s, &mut bytes, 2, "status", "    ");
         }
 
         if let Some(if_statement) = &self.mask.get_cur_hp() {
@@ -514,7 +523,7 @@ impl crate::Message for SMSG_PARTY_MEMBER_STATS_FULL {
         }
 
         if let Some(if_statement) = &self.mask.get_zone() {
-            crate::util::write_bytes(&mut s, &mut bytes, 4, "area", "    ");
+            crate::util::write_bytes(&mut s, &mut bytes, 2, "zone", "    ");
         }
 
         if let Some(if_statement) = &self.mask.get_position() {
@@ -580,6 +589,9 @@ impl crate::Message for SMSG_PARTY_MEMBER_STATS_FULL {
     }
 
     fn write_into_vec(&self, mut w: impl Write) -> Result<(), std::io::Error> {
+        // unknown: u8
+        w.write_all(&self.unknown.to_le_bytes())?;
+
         // guid: PackedGuid
         crate::util::write_packed_guid(&self.guid, &mut w)?;
 
@@ -587,8 +599,8 @@ impl crate::Message for SMSG_PARTY_MEMBER_STATS_FULL {
         w.write_all(&(self.mask.as_int().to_le_bytes()))?;
 
         if let Some(if_statement) = &self.mask.status {
-            // status: GroupMemberOnlineStatus
-            w.write_all(&(if_statement.status.as_int().to_le_bytes()))?;
+            // status: u16
+            w.write_all(&if_statement.status.to_le_bytes())?;
 
         }
 
@@ -629,8 +641,8 @@ impl crate::Message for SMSG_PARTY_MEMBER_STATS_FULL {
         }
 
         if let Some(if_statement) = &self.mask.zone {
-            // area: Area
-            w.write_all(&(if_statement.area.as_int().to_le_bytes()))?;
+            // zone: u16
+            w.write_all(&if_statement.zone.to_le_bytes())?;
 
         }
 
@@ -727,7 +739,8 @@ impl crate::wrath::ServerMessage for SMSG_PARTY_MEMBER_STATS_FULL {}
 
 impl SMSG_PARTY_MEMBER_STATS_FULL {
     pub(crate) fn size(&self) -> usize {
-        crate::util::packed_guid_size(&self.guid) // guid: PackedGuid
+        1 // unknown: u8
+        + crate::util::packed_guid_size(&self.guid) // guid: PackedGuid
         + self.mask.size() // mask: SMSG_PARTY_MEMBER_STATS_FULL_GroupUpdateFlags
     }
 }
@@ -1724,7 +1737,7 @@ impl SMSG_PARTY_MEMBER_STATS_FULL_GroupUpdateFlags {
         4 // inner
         + {
             if let Some(s) = &self.status {
-                1
+                2
             } else {
                 0
             }
@@ -1773,7 +1786,7 @@ impl SMSG_PARTY_MEMBER_STATS_FULL_GroupUpdateFlags {
         }
         + {
             if let Some(s) = &self.zone {
-                4
+                2
             } else {
                 0
             }
@@ -1867,7 +1880,7 @@ impl SMSG_PARTY_MEMBER_STATS_FULL_GroupUpdateFlags {
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord, Default)]
 pub struct SMSG_PARTY_MEMBER_STATS_FULL_GroupUpdateFlags_Status {
-    pub status: GroupMemberOnlineStatus,
+    pub status: u16,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord, Default)]
@@ -1902,7 +1915,7 @@ pub struct SMSG_PARTY_MEMBER_STATS_FULL_GroupUpdateFlags_Level {
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord, Default)]
 pub struct SMSG_PARTY_MEMBER_STATS_FULL_GroupUpdateFlags_Zone {
-    pub area: Area,
+    pub zone: u16,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord, Default)]

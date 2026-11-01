@@ -1,33 +1,34 @@
 use std::io::{Read, Write};
 
-use crate::wrath::{
-    PartyOperation, PartyResult,
-};
-
-/// Auto generated from the original `wowm` in file [`wow_message_parser/wowm/world/social/smsg_party_command_result.wowm:49`](https://github.com/gtker/wow_messages/tree/main/wow_message_parser/wowm/world/social/smsg_party_command_result.wowm#L49):
+/// Auto generated from the original `wowm` in file [`wow_message_parser/wowm/world/social/smsg_party_command_result.wowm:59`](https://github.com/gtker/wow_messages/tree/main/wow_message_parser/wowm/world/social/smsg_party_command_result.wowm#L59):
 /// ```text
 /// smsg SMSG_PARTY_COMMAND_RESULT = 0x007F {
-///     (u32)PartyOperation operation;
+///     u32 operation;
 ///     CString member;
-///     (u32)PartyResult result;
+///     u32 result;
+///     u32 lfd_cooldown;
 /// }
 /// ```
 #[derive(Debug, Clone, PartialEq, Eq, Hash, PartialOrd, Ord, Default)]
 pub struct SMSG_PARTY_COMMAND_RESULT {
-    pub operation: PartyOperation,
+    /// TrinityCore's `PartyOperation`, which has an uninvite (1) and a swap (4) as well.
+    pub operation: u32,
     pub member: String,
-    pub result: PartyResult,
+    /// TrinityCore's `PartyResult`, which goes on past 13.
+    pub result: u32,
+    /// TrinityCore: "LFD cooldown related".
+    pub lfd_cooldown: u32,
 }
 
 impl crate::private::Sealed for SMSG_PARTY_COMMAND_RESULT {}
 impl SMSG_PARTY_COMMAND_RESULT {
     fn read_inner(mut r: &mut &[u8], body_size: u32) -> Result<Self, crate::errors::ParseErrorKind> {
-        if !(9..=264).contains(&body_size) {
+        if !(13..=268).contains(&body_size) {
             return Err(crate::errors::ParseErrorKind::InvalidSize);
         }
 
-        // operation: PartyOperation
-        let operation = (crate::util::read_u32_le(&mut r)? as u8).try_into()?;
+        // operation: u32
+        let operation = crate::util::read_u32_le(&mut r)?;
 
         // member: CString
         let member = {
@@ -35,13 +36,17 @@ impl SMSG_PARTY_COMMAND_RESULT {
             String::from_utf8(member)?
         };
 
-        // result: PartyResult
-        let result = (crate::util::read_u32_le(&mut r)? as u8).try_into()?;
+        // result: u32
+        let result = crate::util::read_u32_le(&mut r)?;
+
+        // lfd_cooldown: u32
+        let lfd_cooldown = crate::util::read_u32_le(&mut r)?;
 
         Ok(Self {
             operation,
             member,
             result,
+            lfd_cooldown,
         })
     }
 
@@ -55,48 +60,13 @@ impl crate::Message for SMSG_PARTY_COMMAND_RESULT {
         "SMSG_PARTY_COMMAND_RESULT"
     }
 
-    #[cfg(feature = "print-testcase")]
-    fn to_test_case_string(&self) -> Option<String> {
-        use std::fmt::Write;
-        use crate::traits::Message;
-
-        let mut s = String::new();
-
-        writeln!(s, "test SMSG_PARTY_COMMAND_RESULT {{").unwrap();
-        // Members
-        writeln!(s, "    operation = {};", self.operation.as_test_case_value()).unwrap();
-        writeln!(s, "    member = \"{}\";", self.member).unwrap();
-        writeln!(s, "    result = {};", self.result.as_test_case_value()).unwrap();
-
-        writeln!(s, "}} [").unwrap();
-
-        let [a, b] = (u16::try_from(self.size() + 2).unwrap()).to_be_bytes();
-        writeln!(s, "    {a:#04X}, {b:#04X}, /* size */").unwrap();
-        let [a, b] = 127_u16.to_le_bytes();
-        writeln!(s, "    {a:#04X}, {b:#04X}, /* opcode */").unwrap();
-        let mut bytes: Vec<u8> = Vec::new();
-        self.write_into_vec(&mut bytes).unwrap();
-        let mut bytes = bytes.into_iter();
-
-        crate::util::write_bytes(&mut s, &mut bytes, 4, "operation", "    ");
-        crate::util::write_bytes(&mut s, &mut bytes, self.member.len() + 1, "member", "    ");
-        crate::util::write_bytes(&mut s, &mut bytes, 4, "result", "    ");
-
-
-        writeln!(s, "] {{").unwrap();
-        writeln!(s, "    versions = \"{}\";", std::env::var("WOWM_TEST_CASE_WORLD_VERSION").unwrap_or("3".to_string())).unwrap();
-        writeln!(s, "}}\n").unwrap();
-
-        Some(s)
-    }
-
     fn size_without_header(&self) -> u32 {
         self.size() as u32
     }
 
     fn write_into_vec(&self, mut w: impl Write) -> Result<(), std::io::Error> {
-        // operation: PartyOperation
-        w.write_all(&u32::from(self.operation.as_int()).to_le_bytes())?;
+        // operation: u32
+        w.write_all(&self.operation.to_le_bytes())?;
 
         // member: CString
         // TODO: Guard against strings that are already null-terminated
@@ -105,8 +75,11 @@ impl crate::Message for SMSG_PARTY_COMMAND_RESULT {
         // Null terminator
         w.write_all(&[0])?;
 
-        // result: PartyResult
-        w.write_all(&u32::from(self.result.as_int()).to_le_bytes())?;
+        // result: u32
+        w.write_all(&self.result.to_le_bytes())?;
+
+        // lfd_cooldown: u32
+        w.write_all(&self.lfd_cooldown.to_le_bytes())?;
 
         Ok(())
     }
@@ -122,9 +95,96 @@ impl crate::wrath::ServerMessage for SMSG_PARTY_COMMAND_RESULT {}
 
 impl SMSG_PARTY_COMMAND_RESULT {
     pub(crate) fn size(&self) -> usize {
-        4 // operation: PartyOperation
+        4 // operation: u32
         + self.member.len() + 1 // member: CString
-        + 4 // result: PartyResult
+        + 4 // result: u32
+        + 4 // lfd_cooldown: u32
     }
+}
+
+#[cfg(test)]
+mod test {
+    #![allow(clippy::missing_const_for_fn)]
+    use super::SMSG_PARTY_COMMAND_RESULT;
+    use super::*;
+    use super::super::*;
+    use crate::wrath::opcodes::ServerOpcodeMessage;
+    use crate::wrath::{ClientMessage, ServerMessage};
+
+    const HEADER_SIZE: usize = 2 + 2;
+    const RAW0: [u8; 23] = [ 0x00, 0x15, 0x7F, 0x00, 0x00, 0x00, 0x00, 0x00, 0x54,
+         0x68, 0x72, 0x61, 0x6C, 0x6C, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+         0x00, 0x00, ];
+
+    pub(crate) fn expected0() -> SMSG_PARTY_COMMAND_RESULT {
+        SMSG_PARTY_COMMAND_RESULT {
+            operation: 0x0,
+            member: String::from("Thrall"),
+            result: 0x0,
+            lfd_cooldown: 0x0,
+        }
+
+    }
+
+    // Generated from `wow_message_parser/wowm/world/social/smsg_party_command_result.wowm` line 73.
+    #[cfg(feature = "sync")]
+    #[cfg_attr(feature = "sync", test)]
+    fn smsg_party_command_result0() {
+        let expected = expected0();
+        let t = ServerOpcodeMessage::read_unencrypted(&mut std::io::Cursor::new(&RAW0)).unwrap();
+        let t = match t {
+            ServerOpcodeMessage::SMSG_PARTY_COMMAND_RESULT(t) => t,
+            opcode => panic!("incorrect opcode. Expected SMSG_PARTY_COMMAND_RESULT, got {opcode:#?}"),
+        };
+
+        assert_eq!(t.as_ref(), &expected);
+        assert_eq!(t.size() + HEADER_SIZE, RAW0.len());
+
+        let mut dest = Vec::with_capacity(RAW0.len());
+        expected.write_unencrypted_server(&mut std::io::Cursor::new(&mut dest)).unwrap();
+
+        assert_eq!(dest, RAW0);
+    }
+
+    // Generated from `wow_message_parser/wowm/world/social/smsg_party_command_result.wowm` line 73.
+    #[cfg(feature = "tokio")]
+    #[cfg_attr(feature = "tokio", tokio::test)]
+    async fn tokio_smsg_party_command_result0() {
+        let expected = expected0();
+        let t = ServerOpcodeMessage::tokio_read_unencrypted(&mut std::io::Cursor::new(&RAW0)).await.unwrap();
+        let t = match t {
+            ServerOpcodeMessage::SMSG_PARTY_COMMAND_RESULT(t) => t,
+            opcode => panic!("incorrect opcode. Expected SMSG_PARTY_COMMAND_RESULT, got {opcode:#?}"),
+        };
+
+        assert_eq!(t.as_ref(), &expected);
+        assert_eq!(t.size() + HEADER_SIZE, RAW0.len());
+
+        let mut dest = Vec::with_capacity(RAW0.len());
+        expected.tokio_write_unencrypted_server(&mut std::io::Cursor::new(&mut dest)).await.unwrap();
+
+        assert_eq!(dest, RAW0);
+    }
+
+    // Generated from `wow_message_parser/wowm/world/social/smsg_party_command_result.wowm` line 73.
+    #[cfg(feature = "async-std")]
+    #[cfg_attr(feature = "async-std", async_std::test)]
+    async fn astd_smsg_party_command_result0() {
+        let expected = expected0();
+        let t = ServerOpcodeMessage::astd_read_unencrypted(&mut async_std::io::Cursor::new(&RAW0)).await.unwrap();
+        let t = match t {
+            ServerOpcodeMessage::SMSG_PARTY_COMMAND_RESULT(t) => t,
+            opcode => panic!("incorrect opcode. Expected SMSG_PARTY_COMMAND_RESULT, got {opcode:#?}"),
+        };
+
+        assert_eq!(t.as_ref(), &expected);
+        assert_eq!(t.size() + HEADER_SIZE, RAW0.len());
+
+        let mut dest = Vec::with_capacity(RAW0.len());
+        expected.astd_write_unencrypted_server(&mut async_std::io::Cursor::new(&mut dest)).await.unwrap();
+
+        assert_eq!(dest, RAW0);
+    }
+
 }
 

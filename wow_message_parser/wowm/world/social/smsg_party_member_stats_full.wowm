@@ -135,10 +135,13 @@ smsg SMSG_PARTY_MEMBER_STATS_FULL = 0x02F2 {
 }
 
 smsg SMSG_PARTY_MEMBER_STATS_FULL = 0x02F2 {
+    /// TrinityCore: "only for SMSG_PARTY_MEMBER_STATS_FULL, probably arena/bg related".
+    u8 unknown;
     PackedGuid guid;
     GroupUpdateFlags mask;
     if (mask & STATUS) {
-        GroupMemberOnlineStatus status;       
+        /// `GroupMemberOnlineStatus` bits, written as a u16. TrinityCore: `uint16(playerStatus)`.
+        u16 status;
     }
     if (mask & CUR_HP) {
         u32 current_health;
@@ -159,7 +162,8 @@ smsg SMSG_PARTY_MEMBER_STATS_FULL = 0x02F2 {
         Level16 level;
     }
     if (mask & ZONE) {
-        Area area;
+        /// TrinityCore: `uint16(GetZoneId())`.
+        u16 zone;
     }
     if (mask & POSITION) {
         /// cmangos: float cast to u16

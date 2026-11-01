@@ -3,7 +3,7 @@ use std::io::{Read, Write};
 use crate::Guid;
 use crate::shared::level_vanilla_tbc_wrath::Level;
 use crate::wrath::{
-    Area, AuraMask, GroupMemberOnlineStatus, GroupUpdateFlags, Power,
+    AuraMask, GroupUpdateFlags, Power,
 };
 
 /// Auto generated from the original `wowm` in file [`wow_message_parser/wowm/world/social/smsg_party_member_stats.wowm:148`](https://github.com/gtker/wow_messages/tree/main/wow_message_parser/wowm/world/social/smsg_party_member_stats.wowm#L148):
@@ -12,7 +12,7 @@ use crate::wrath::{
 ///     PackedGuid guid;
 ///     GroupUpdateFlags mask;
 ///     if (mask & STATUS) {
-///         GroupMemberOnlineStatus status;
+///         u16 status;
 ///     }
 ///     if (mask & CUR_HP) {
 ///         u32 current_health;
@@ -33,7 +33,7 @@ use crate::wrath::{
 ///         Level16 level;
 ///     }
 ///     if (mask & ZONE) {
-///         Area area;
+///         u16 zone;
 ///     }
 ///     if (mask & POSITION) {
 ///         u16 position_x;
@@ -83,7 +83,7 @@ pub struct SMSG_PARTY_MEMBER_STATS {
 impl crate::private::Sealed for SMSG_PARTY_MEMBER_STATS {}
 impl SMSG_PARTY_MEMBER_STATS {
     fn read_inner(mut r: &mut &[u8], body_size: u32) -> Result<Self, crate::errors::ParseErrorKind> {
-        if !(5..=584).contains(&body_size) {
+        if !(5..=583).contains(&body_size) {
             return Err(crate::errors::ParseErrorKind::InvalidSize);
         }
 
@@ -94,8 +94,8 @@ impl SMSG_PARTY_MEMBER_STATS {
         let mask = GroupUpdateFlags::new(crate::util::read_u32_le(&mut r)?);
 
         let mask_status = if mask.is_status() {
-            // status: GroupMemberOnlineStatus
-            let status = GroupMemberOnlineStatus::new(crate::util::read_u8_le(&mut r)?);
+            // status: u16
+            let status = crate::util::read_u16_le(&mut r)?;
 
             Some(SMSG_PARTY_MEMBER_STATS_GroupUpdateFlags_Status {
                 status,
@@ -178,11 +178,11 @@ impl SMSG_PARTY_MEMBER_STATS {
         };
 
         let mask_zone = if mask.is_zone() {
-            // area: Area
-            let area = crate::util::read_u32_le(&mut r)?.try_into()?;
+            // zone: u16
+            let zone = crate::util::read_u16_le(&mut r)?;
 
             Some(SMSG_PARTY_MEMBER_STATS_GroupUpdateFlags_Zone {
-                area,
+                zone,
             })
         }
         else {
@@ -380,201 +380,6 @@ impl crate::Message for SMSG_PARTY_MEMBER_STATS {
         "SMSG_PARTY_MEMBER_STATS"
     }
 
-    #[cfg(feature = "print-testcase")]
-    fn to_test_case_string(&self) -> Option<String> {
-        use std::fmt::Write;
-        use crate::traits::Message;
-
-        let mut s = String::new();
-
-        writeln!(s, "test SMSG_PARTY_MEMBER_STATS {{").unwrap();
-        // Members
-        writeln!(s, "    guid = {};", self.guid.guid()).unwrap();
-        writeln!(s, "    mask = {};", GroupUpdateFlags::new(self.mask.as_int()).as_test_case_value()).unwrap();
-        if let Some(if_statement) = &self.mask.get_status() {
-            writeln!(s, "    status = {};", if_statement.status.as_test_case_value()).unwrap();
-        }
-
-        if let Some(if_statement) = &self.mask.get_cur_hp() {
-            writeln!(s, "    current_health = {};", if_statement.current_health).unwrap();
-        }
-
-        if let Some(if_statement) = &self.mask.get_max_hp() {
-            writeln!(s, "    max_health = {};", if_statement.max_health).unwrap();
-        }
-
-        if let Some(if_statement) = &self.mask.get_power_type() {
-            writeln!(s, "    power = {};", if_statement.power.as_test_case_value()).unwrap();
-        }
-
-        if let Some(if_statement) = &self.mask.get_cur_power() {
-            writeln!(s, "    current_power = {};", if_statement.current_power).unwrap();
-        }
-
-        if let Some(if_statement) = &self.mask.get_max_power() {
-            writeln!(s, "    max_power = {};", if_statement.max_power).unwrap();
-        }
-
-        if let Some(if_statement) = &self.mask.get_level() {
-            writeln!(s, "    level = {};", if_statement.level.as_int()).unwrap();
-        }
-
-        if let Some(if_statement) = &self.mask.get_zone() {
-            writeln!(s, "    area = {};", if_statement.area.as_test_case_value()).unwrap();
-        }
-
-        if let Some(if_statement) = &self.mask.get_position() {
-            writeln!(s, "    position_x = {};", if_statement.position_x).unwrap();
-            writeln!(s, "    position_y = {};", if_statement.position_y).unwrap();
-        }
-
-        if let Some(if_statement) = &self.mask.get_auras() {
-            panic!("unsupported type for test case printing: 'AuraMask' for variable 'auras'");
-        }
-
-        if let Some(if_statement) = &self.mask.get_pet_guid() {
-            writeln!(s, "    pet = {};", if_statement.pet.guid()).unwrap();
-        }
-
-        if let Some(if_statement) = &self.mask.get_pet_name() {
-            writeln!(s, "    pet_name = \"{}\";", if_statement.pet_name).unwrap();
-        }
-
-        if let Some(if_statement) = &self.mask.get_pet_model_id() {
-            writeln!(s, "    pet_display_id = {};", if_statement.pet_display_id).unwrap();
-        }
-
-        if let Some(if_statement) = &self.mask.get_pet_cur_hp() {
-            writeln!(s, "    pet_current_health = {};", if_statement.pet_current_health).unwrap();
-        }
-
-        if let Some(if_statement) = &self.mask.get_pet_max_hp() {
-            writeln!(s, "    pet_max_health = {};", if_statement.pet_max_health).unwrap();
-        }
-
-        if let Some(if_statement) = &self.mask.get_pet_power_type() {
-            writeln!(s, "    pet_power_type = {};", if_statement.pet_power_type.as_test_case_value()).unwrap();
-        }
-
-        if let Some(if_statement) = &self.mask.get_pet_cur_power() {
-            writeln!(s, "    pet_current_power = {};", if_statement.pet_current_power).unwrap();
-        }
-
-        if let Some(if_statement) = &self.mask.get_pet_max_power() {
-            writeln!(s, "    pet_max_power = {};", if_statement.pet_max_power).unwrap();
-        }
-
-        if let Some(if_statement) = &self.mask.get_pet_auras() {
-            panic!("unsupported type for test case printing: 'AuraMask' for variable 'pet_auras'");
-        }
-
-        if let Some(if_statement) = &self.mask.get_vehicle_seat() {
-            writeln!(s, "    transport = {};", if_statement.transport).unwrap();
-        }
-
-
-        writeln!(s, "}} [").unwrap();
-
-        let [a, b] = (u16::try_from(self.size() + 2).unwrap()).to_be_bytes();
-        writeln!(s, "    {a:#04X}, {b:#04X}, /* size */").unwrap();
-        let [a, b] = 126_u16.to_le_bytes();
-        writeln!(s, "    {a:#04X}, {b:#04X}, /* opcode */").unwrap();
-        let mut bytes: Vec<u8> = Vec::new();
-        self.write_into_vec(&mut bytes).unwrap();
-        let mut bytes = bytes.into_iter();
-
-        crate::util::write_bytes(&mut s, &mut bytes, crate::util::packed_guid_size(&self.guid), "guid", "    ");
-        crate::util::write_bytes(&mut s, &mut bytes, 4, "mask", "    ");
-        if let Some(if_statement) = &self.mask.get_status() {
-            crate::util::write_bytes(&mut s, &mut bytes, 1, "status", "    ");
-        }
-
-        if let Some(if_statement) = &self.mask.get_cur_hp() {
-            crate::util::write_bytes(&mut s, &mut bytes, 4, "current_health", "    ");
-        }
-
-        if let Some(if_statement) = &self.mask.get_max_hp() {
-            crate::util::write_bytes(&mut s, &mut bytes, 4, "max_health", "    ");
-        }
-
-        if let Some(if_statement) = &self.mask.get_power_type() {
-            crate::util::write_bytes(&mut s, &mut bytes, 1, "power", "    ");
-        }
-
-        if let Some(if_statement) = &self.mask.get_cur_power() {
-            crate::util::write_bytes(&mut s, &mut bytes, 2, "current_power", "    ");
-        }
-
-        if let Some(if_statement) = &self.mask.get_max_power() {
-            crate::util::write_bytes(&mut s, &mut bytes, 2, "max_power", "    ");
-        }
-
-        if let Some(if_statement) = &self.mask.get_level() {
-            crate::util::write_bytes(&mut s, &mut bytes, 2, "level", "    ");
-        }
-
-        if let Some(if_statement) = &self.mask.get_zone() {
-            crate::util::write_bytes(&mut s, &mut bytes, 4, "area", "    ");
-        }
-
-        if let Some(if_statement) = &self.mask.get_position() {
-            crate::util::write_bytes(&mut s, &mut bytes, 2, "position_x", "    ");
-            crate::util::write_bytes(&mut s, &mut bytes, 2, "position_y", "    ");
-        }
-
-        if let Some(if_statement) = &self.mask.get_auras() {
-            panic!("unsupported type AuraMask for variable 'auras'");
-        }
-
-        if let Some(if_statement) = &self.mask.get_pet_guid() {
-            crate::util::write_bytes(&mut s, &mut bytes, 8, "pet", "    ");
-        }
-
-        if let Some(if_statement) = &self.mask.get_pet_name() {
-            crate::util::write_bytes(&mut s, &mut bytes, if_statement.pet_name.len() + 1, "pet_name", "    ");
-        }
-
-        if let Some(if_statement) = &self.mask.get_pet_model_id() {
-            crate::util::write_bytes(&mut s, &mut bytes, 2, "pet_display_id", "    ");
-        }
-
-        if let Some(if_statement) = &self.mask.get_pet_cur_hp() {
-            crate::util::write_bytes(&mut s, &mut bytes, 4, "pet_current_health", "    ");
-        }
-
-        if let Some(if_statement) = &self.mask.get_pet_max_hp() {
-            crate::util::write_bytes(&mut s, &mut bytes, 4, "pet_max_health", "    ");
-        }
-
-        if let Some(if_statement) = &self.mask.get_pet_power_type() {
-            crate::util::write_bytes(&mut s, &mut bytes, 1, "pet_power_type", "    ");
-        }
-
-        if let Some(if_statement) = &self.mask.get_pet_cur_power() {
-            crate::util::write_bytes(&mut s, &mut bytes, 2, "pet_current_power", "    ");
-        }
-
-        if let Some(if_statement) = &self.mask.get_pet_max_power() {
-            crate::util::write_bytes(&mut s, &mut bytes, 2, "pet_max_power", "    ");
-        }
-
-        if let Some(if_statement) = &self.mask.get_pet_auras() {
-            panic!("unsupported type AuraMask for variable 'pet_auras'");
-        }
-
-        if let Some(if_statement) = &self.mask.get_vehicle_seat() {
-            crate::util::write_bytes(&mut s, &mut bytes, 4, "transport", "    ");
-        }
-
-
-
-        writeln!(s, "] {{").unwrap();
-        writeln!(s, "    versions = \"{}\";", std::env::var("WOWM_TEST_CASE_WORLD_VERSION").unwrap_or("3.3.5".to_string())).unwrap();
-        writeln!(s, "}}\n").unwrap();
-
-        Some(s)
-    }
-
     fn size_without_header(&self) -> u32 {
         self.size() as u32
     }
@@ -587,8 +392,8 @@ impl crate::Message for SMSG_PARTY_MEMBER_STATS {
         w.write_all(&(self.mask.as_int().to_le_bytes()))?;
 
         if let Some(if_statement) = &self.mask.status {
-            // status: GroupMemberOnlineStatus
-            w.write_all(&(if_statement.status.as_int().to_le_bytes()))?;
+            // status: u16
+            w.write_all(&if_statement.status.to_le_bytes())?;
 
         }
 
@@ -629,8 +434,8 @@ impl crate::Message for SMSG_PARTY_MEMBER_STATS {
         }
 
         if let Some(if_statement) = &self.mask.zone {
-            // area: Area
-            w.write_all(&(if_statement.area.as_int().to_le_bytes()))?;
+            // zone: u16
+            w.write_all(&if_statement.zone.to_le_bytes())?;
 
         }
 
@@ -1724,7 +1529,7 @@ impl SMSG_PARTY_MEMBER_STATS_GroupUpdateFlags {
         4 // inner
         + {
             if let Some(s) = &self.status {
-                1
+                2
             } else {
                 0
             }
@@ -1773,7 +1578,7 @@ impl SMSG_PARTY_MEMBER_STATS_GroupUpdateFlags {
         }
         + {
             if let Some(s) = &self.zone {
-                4
+                2
             } else {
                 0
             }
@@ -1867,7 +1672,7 @@ impl SMSG_PARTY_MEMBER_STATS_GroupUpdateFlags {
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord, Default)]
 pub struct SMSG_PARTY_MEMBER_STATS_GroupUpdateFlags_Status {
-    pub status: GroupMemberOnlineStatus,
+    pub status: u16,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord, Default)]
@@ -1902,7 +1707,7 @@ pub struct SMSG_PARTY_MEMBER_STATS_GroupUpdateFlags_Level {
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord, Default)]
 pub struct SMSG_PARTY_MEMBER_STATS_GroupUpdateFlags_Zone {
-    pub area: Area,
+    pub zone: u16,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord, Default)]
@@ -1982,5 +1787,107 @@ impl SMSG_PARTY_MEMBER_STATS_GroupUpdateFlags_PetAuras {
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord, Default)]
 pub struct SMSG_PARTY_MEMBER_STATS_GroupUpdateFlags_VehicleSeat {
     pub transport: u32,
+}
+
+#[cfg(test)]
+mod test {
+    #![allow(clippy::missing_const_for_fn)]
+    use super::SMSG_PARTY_MEMBER_STATS;
+    use super::*;
+    use super::super::*;
+    use crate::wrath::opcodes::ServerOpcodeMessage;
+    use crate::Guid;
+    use crate::wrath::{AuraMask};
+    use crate::wrath::{ClientMessage, ServerMessage};
+
+    const HEADER_SIZE: usize = 2 + 2;
+    const RAW0: [u8; 24] = [ 0x00, 0x16, 0x7E, 0x00, 0x01, 0x06, 0xC7, 0x00, 0x00,
+         0x00, 0x05, 0x00, 0x78, 0x00, 0x00, 0x00, 0x90, 0x01, 0x00, 0x00, 0x0C,
+         0x00, 0x0C, 0x00, ];
+
+    pub(crate) fn expected0() -> SMSG_PARTY_MEMBER_STATS {
+        SMSG_PARTY_MEMBER_STATS {
+            guid: Guid::new(0x6),
+            mask: SMSG_PARTY_MEMBER_STATS_GroupUpdateFlags::empty()
+                .set_status(SMSG_PARTY_MEMBER_STATS_GroupUpdateFlags_Status {
+                    status: 0x5,
+                })
+                .set_cur_hp(SMSG_PARTY_MEMBER_STATS_GroupUpdateFlags_CurHp {
+                    current_health: 0x78,
+                })
+                .set_max_hp(SMSG_PARTY_MEMBER_STATS_GroupUpdateFlags_MaxHp {
+                    max_health: 0x190,
+                })
+                .set_level(SMSG_PARTY_MEMBER_STATS_GroupUpdateFlags_Level {
+                    level: Level::try_from(0xC).unwrap(),
+                })
+                .set_zone(SMSG_PARTY_MEMBER_STATS_GroupUpdateFlags_Zone {
+                    zone: 0xC,
+                })
+                ,
+        }
+
+    }
+
+    // Generated from `wow_message_parser/wowm/world/social/smsg_party_member_stats.wowm` line 229.
+    #[cfg(feature = "sync")]
+    #[cfg_attr(feature = "sync", test)]
+    fn smsg_party_member_stats0() {
+        let expected = expected0();
+        let t = ServerOpcodeMessage::read_unencrypted(&mut std::io::Cursor::new(&RAW0)).unwrap();
+        let t = match t {
+            ServerOpcodeMessage::SMSG_PARTY_MEMBER_STATS(t) => t,
+            opcode => panic!("incorrect opcode. Expected SMSG_PARTY_MEMBER_STATS, got {opcode:#?}"),
+        };
+
+        assert_eq!(t.as_ref(), &expected);
+        assert_eq!(t.size() + HEADER_SIZE, RAW0.len());
+
+        let mut dest = Vec::with_capacity(RAW0.len());
+        expected.write_unencrypted_server(&mut std::io::Cursor::new(&mut dest)).unwrap();
+
+        assert_eq!(dest, RAW0);
+    }
+
+    // Generated from `wow_message_parser/wowm/world/social/smsg_party_member_stats.wowm` line 229.
+    #[cfg(feature = "tokio")]
+    #[cfg_attr(feature = "tokio", tokio::test)]
+    async fn tokio_smsg_party_member_stats0() {
+        let expected = expected0();
+        let t = ServerOpcodeMessage::tokio_read_unencrypted(&mut std::io::Cursor::new(&RAW0)).await.unwrap();
+        let t = match t {
+            ServerOpcodeMessage::SMSG_PARTY_MEMBER_STATS(t) => t,
+            opcode => panic!("incorrect opcode. Expected SMSG_PARTY_MEMBER_STATS, got {opcode:#?}"),
+        };
+
+        assert_eq!(t.as_ref(), &expected);
+        assert_eq!(t.size() + HEADER_SIZE, RAW0.len());
+
+        let mut dest = Vec::with_capacity(RAW0.len());
+        expected.tokio_write_unencrypted_server(&mut std::io::Cursor::new(&mut dest)).await.unwrap();
+
+        assert_eq!(dest, RAW0);
+    }
+
+    // Generated from `wow_message_parser/wowm/world/social/smsg_party_member_stats.wowm` line 229.
+    #[cfg(feature = "async-std")]
+    #[cfg_attr(feature = "async-std", async_std::test)]
+    async fn astd_smsg_party_member_stats0() {
+        let expected = expected0();
+        let t = ServerOpcodeMessage::astd_read_unencrypted(&mut async_std::io::Cursor::new(&RAW0)).await.unwrap();
+        let t = match t {
+            ServerOpcodeMessage::SMSG_PARTY_MEMBER_STATS(t) => t,
+            opcode => panic!("incorrect opcode. Expected SMSG_PARTY_MEMBER_STATS, got {opcode:#?}"),
+        };
+
+        assert_eq!(t.as_ref(), &expected);
+        assert_eq!(t.size() + HEADER_SIZE, RAW0.len());
+
+        let mut dest = Vec::with_capacity(RAW0.len());
+        expected.astd_write_unencrypted_server(&mut async_std::io::Cursor::new(&mut dest)).await.unwrap();
+
+        assert_eq!(dest, RAW0);
+    }
+
 }
 

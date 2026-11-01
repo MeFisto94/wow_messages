@@ -97584,14 +97584,6 @@
             "definer_usage": "RegularUse"
           },
           {
-            "object_name": "SMSG_PARTY_MEMBER_STATS",
-            "definer_usage": "RegularUse"
-          },
-          {
-            "object_name": "SMSG_PARTY_MEMBER_STATS_FULL",
-            "definer_usage": "RegularUse"
-          },
-          {
             "object_name": "SMSG_PET_CAST_FAILED",
             "definer_usage": "RegularUse"
           },
@@ -207109,8 +207101,8 @@
         "tests": [],
         "file_info": {
           "file_name": "wow_message_parser/wowm/world/social/smsg_party_member_stats.wowm",
-          "start_position": 219,
-          "end_position": 225
+          "start_position": 221,
+          "end_position": 227
         },
         "only_has_io_error": true,
         "has_manual_size_field": false,
@@ -308543,7 +308535,7 @@
         "sizes": {
           "constant_sized": false,
           "minimum_size": 5,
-          "maximum_size": 584
+          "maximum_size": 583
         },
         "members": [
           {
@@ -308606,44 +308598,16 @@
                   "struct_member_content": {
                     "name": "status",
                     "data_type": {
-                      "data_type_tag": "Flag",
-                      "type_name": "GroupMemberOnlineStatus",
-                      "integer_type": "U8",
-                      "tags": {
-                        "version": {
-                          "version_type_tag": "world",
-                          "version_type": {
-                            "world_version_tag": "specific",
-                            "versions": [
-                              {
-                                "major": 1,
-                                "minor": 12,
-                                "patch": null,
-                                "build": null
-                              },
-                              {
-                                "major": 2,
-                                "minor": null,
-                                "patch": null,
-                                "build": null
-                              },
-                              {
-                                "major": 3,
-                                "minor": null,
-                                "patch": null,
-                                "build": null
-                              }
-                            ]
-                          }
-                        }
-                      },
-                      "upcast": false
+                      "data_type_tag": "Integer",
+                      "integer_type": "U16"
                     },
                     "constant_value": null,
                     "used_as_size_in": null,
                     "size_of_fields_before_size": null,
                     "used_in_if": false,
-                    "tags": {}
+                    "tags": {
+                      "comment": "`GroupMemberOnlineStatus` bits, written as a u16. TrinityCore: `uint16(playerStatus)`."
+                    }
                   }
                 }
               ],
@@ -309015,34 +308979,18 @@
                 {
                   "struct_member_tag": "Definition",
                   "struct_member_content": {
-                    "name": "area",
+                    "name": "zone",
                     "data_type": {
-                      "data_type_tag": "Enum",
-                      "type_name": "Area",
-                      "integer_type": "U32",
-                      "tags": {
-                        "version": {
-                          "version_type_tag": "world",
-                          "version_type": {
-                            "world_version_tag": "specific",
-                            "versions": [
-                              {
-                                "major": 3,
-                                "minor": 3,
-                                "patch": 5,
-                                "build": null
-                              }
-                            ]
-                          }
-                        }
-                      },
-                      "upcast": false
+                      "data_type_tag": "Integer",
+                      "integer_type": "U16"
                     },
                     "constant_value": null,
                     "used_as_size_in": null,
                     "size_of_fields_before_size": null,
                     "used_in_if": false,
-                    "tags": {}
+                    "tags": {
+                      "comment": "TrinityCore: `uint16(GetZoneId())`."
+                    }
                   }
                 }
               ],
@@ -309750,11 +309698,144 @@
             }
           }
         },
-        "tests": [],
+        "tests": [
+          {
+            "subject": "SMSG_PARTY_MEMBER_STATS",
+            "members": [
+              {
+                "variable_name": "guid",
+                "value": {
+                  "test_value_tag": "Guid",
+                  "content": {
+                    "value": "6",
+                    "original_string": "6"
+                  }
+                },
+                "tags": {}
+              },
+              {
+                "variable_name": "mask",
+                "value": {
+                  "test_value_tag": "Flag",
+                  "content": [
+                    "STATUS",
+                    "CUR_HP",
+                    "MAX_HP",
+                    "LEVEL",
+                    "ZONE"
+                  ]
+                },
+                "tags": {}
+              },
+              {
+                "variable_name": "status",
+                "value": {
+                  "test_value_tag": "Integer",
+                  "content": {
+                    "value": "5",
+                    "original_string": "5"
+                  }
+                },
+                "tags": {}
+              },
+              {
+                "variable_name": "current_health",
+                "value": {
+                  "test_value_tag": "Integer",
+                  "content": {
+                    "value": "120",
+                    "original_string": "120"
+                  }
+                },
+                "tags": {}
+              },
+              {
+                "variable_name": "max_health",
+                "value": {
+                  "test_value_tag": "Integer",
+                  "content": {
+                    "value": "400",
+                    "original_string": "400"
+                  }
+                },
+                "tags": {}
+              },
+              {
+                "variable_name": "level",
+                "value": {
+                  "test_value_tag": "Level",
+                  "content": {
+                    "value": "12",
+                    "original_string": "12"
+                  }
+                },
+                "tags": {}
+              },
+              {
+                "variable_name": "zone",
+                "value": {
+                  "test_value_tag": "Integer",
+                  "content": {
+                    "value": "12",
+                    "original_string": "12"
+                  }
+                },
+                "tags": {}
+              }
+            ],
+            "raw_bytes": [
+              0,
+              22,
+              126,
+              0,
+              1,
+              6,
+              199,
+              0,
+              0,
+              0,
+              5,
+              0,
+              120,
+              0,
+              0,
+              0,
+              144,
+              1,
+              0,
+              0,
+              12,
+              0,
+              12,
+              0
+            ],
+            "tags": {
+              "version": {
+                "version_type_tag": "world",
+                "version_type": {
+                  "world_version_tag": "specific",
+                  "versions": [
+                    {
+                      "major": 3,
+                      "minor": 3,
+                      "patch": 5,
+                      "build": null
+                    }
+                  ]
+                }
+              }
+            },
+            "file_info": {
+              "file_name": "wow_message_parser/wowm/world/social/smsg_party_member_stats.wowm",
+              "start_position": 229,
+              "end_position": 249
+            }
+          }
+        ],
         "file_info": {
           "file_name": "wow_message_parser/wowm/world/social/smsg_party_member_stats.wowm",
           "start_position": 148,
-          "end_position": 217
+          "end_position": 219
         },
         "only_has_io_error": false,
         "has_manual_size_field": false,
@@ -309898,8 +309979,7 @@
                 {
                   "name": "status",
                   "is_elseif_flag": false,
-                  "enum_part_of_separate_statements": false,
-                  "definer_type": "Flag"
+                  "enum_part_of_separate_statements": false
                 }
               ],
               "VEHICLE_SEAT": [
@@ -309911,10 +309991,9 @@
               ],
               "ZONE": [
                 {
-                  "name": "area",
+                  "name": "zone",
                   "is_elseif_flag": false,
-                  "enum_part_of_separate_statements": false,
-                  "definer_type": "Enum"
+                  "enum_part_of_separate_statements": false
                 }
               ]
             },
@@ -310245,8 +310324,8 @@
         },
         "sizes": {
           "constant_sized": false,
-          "minimum_size": 9,
-          "maximum_size": 264
+          "minimum_size": 13,
+          "maximum_size": 268
         },
         "members": [
           {
@@ -310254,44 +310333,16 @@
             "struct_member_content": {
               "name": "operation",
               "data_type": {
-                "data_type_tag": "Enum",
-                "type_name": "PartyOperation",
-                "integer_type": "U32",
-                "tags": {
-                  "version": {
-                    "version_type_tag": "world",
-                    "version_type": {
-                      "world_version_tag": "specific",
-                      "versions": [
-                        {
-                          "major": 1,
-                          "minor": null,
-                          "patch": null,
-                          "build": null
-                        },
-                        {
-                          "major": 2,
-                          "minor": null,
-                          "patch": null,
-                          "build": null
-                        },
-                        {
-                          "major": 3,
-                          "minor": null,
-                          "patch": null,
-                          "build": null
-                        }
-                      ]
-                    }
-                  }
-                },
-                "upcast": true
+                "data_type_tag": "Integer",
+                "integer_type": "U32"
               },
               "constant_value": null,
               "used_as_size_in": null,
               "size_of_fields_before_size": null,
               "used_in_if": false,
-              "tags": {}
+              "tags": {
+                "comment": "TrinityCore's `PartyOperation`, which has an uninvite (1) and a swap (4) as well."
+              }
             }
           },
           {
@@ -310315,38 +310366,33 @@
             "struct_member_content": {
               "name": "result",
               "data_type": {
-                "data_type_tag": "Enum",
-                "type_name": "PartyResult",
-                "integer_type": "U32",
-                "tags": {
-                  "version": {
-                    "version_type_tag": "world",
-                    "version_type": {
-                      "world_version_tag": "specific",
-                      "versions": [
-                        {
-                          "major": 2,
-                          "minor": 4,
-                          "patch": 3,
-                          "build": null
-                        },
-                        {
-                          "major": 3,
-                          "minor": null,
-                          "patch": null,
-                          "build": null
-                        }
-                      ]
-                    }
-                  }
-                },
-                "upcast": true
+                "data_type_tag": "Integer",
+                "integer_type": "U32"
               },
               "constant_value": null,
               "used_as_size_in": null,
               "size_of_fields_before_size": null,
               "used_in_if": false,
-              "tags": {}
+              "tags": {
+                "comment": "TrinityCore's `PartyResult`, which goes on past 13."
+              }
+            }
+          },
+          {
+            "struct_member_tag": "Definition",
+            "struct_member_content": {
+              "name": "lfd_cooldown",
+              "data_type": {
+                "data_type_tag": "Integer",
+                "integer_type": "U32"
+              },
+              "constant_value": null,
+              "used_as_size_in": null,
+              "size_of_fields_before_size": null,
+              "used_in_if": false,
+              "tags": {
+                "comment": "TrinityCore: \"LFD cooldown related\"."
+              }
             }
           }
         ],
@@ -310358,19 +310404,112 @@
               "versions": [
                 {
                   "major": 3,
-                  "minor": null,
-                  "patch": null,
+                  "minor": 3,
+                  "patch": 5,
                   "build": null
                 }
               ]
             }
           }
         },
-        "tests": [],
+        "tests": [
+          {
+            "subject": "SMSG_PARTY_COMMAND_RESULT",
+            "members": [
+              {
+                "variable_name": "operation",
+                "value": {
+                  "test_value_tag": "Integer",
+                  "content": {
+                    "value": "0",
+                    "original_string": "0"
+                  }
+                },
+                "tags": {}
+              },
+              {
+                "variable_name": "member",
+                "value": {
+                  "test_value_tag": "String",
+                  "content": "Thrall"
+                },
+                "tags": {}
+              },
+              {
+                "variable_name": "result",
+                "value": {
+                  "test_value_tag": "Integer",
+                  "content": {
+                    "value": "0",
+                    "original_string": "0"
+                  }
+                },
+                "tags": {}
+              },
+              {
+                "variable_name": "lfd_cooldown",
+                "value": {
+                  "test_value_tag": "Integer",
+                  "content": {
+                    "value": "0",
+                    "original_string": "0"
+                  }
+                },
+                "tags": {}
+              }
+            ],
+            "raw_bytes": [
+              0,
+              21,
+              127,
+              0,
+              0,
+              0,
+              0,
+              0,
+              84,
+              104,
+              114,
+              97,
+              108,
+              108,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "tags": {
+              "version": {
+                "version_type_tag": "world",
+                "version_type": {
+                  "world_version_tag": "specific",
+                  "versions": [
+                    {
+                      "major": 3,
+                      "minor": 3,
+                      "patch": 5,
+                      "build": null
+                    }
+                  ]
+                }
+              }
+            },
+            "file_info": {
+              "file_name": "wow_message_parser/wowm/world/social/smsg_party_command_result.wowm",
+              "start_position": 73,
+              "end_position": 87
+            }
+          }
+        ],
         "file_info": {
           "file_name": "wow_message_parser/wowm/world/social/smsg_party_command_result.wowm",
-          "start_position": 49,
-          "end_position": 57
+          "start_position": 59,
+          "end_position": 71
         },
         "only_has_io_error": false,
         "has_manual_size_field": false,
@@ -310379,8 +310518,7 @@
           {
             "name": "operation",
             "is_elseif_flag": false,
-            "enum_part_of_separate_statements": false,
-            "definer_type": "Enum"
+            "enum_part_of_separate_statements": false
           },
           {
             "name": "member",
@@ -310390,8 +310528,12 @@
           {
             "name": "result",
             "is_elseif_flag": false,
-            "enum_part_of_separate_statements": false,
-            "definer_type": "Enum"
+            "enum_part_of_separate_statements": false
+          },
+          {
+            "name": "lfd_cooldown",
+            "is_elseif_flag": false,
+            "enum_part_of_separate_statements": false
           }
         ],
         "optional": null
@@ -690145,10 +690287,27 @@
         },
         "sizes": {
           "constant_sized": false,
-          "minimum_size": 5,
+          "minimum_size": 6,
           "maximum_size": 584
         },
         "members": [
+          {
+            "struct_member_tag": "Definition",
+            "struct_member_content": {
+              "name": "unknown",
+              "data_type": {
+                "data_type_tag": "Integer",
+                "integer_type": "U8"
+              },
+              "constant_value": null,
+              "used_as_size_in": null,
+              "size_of_fields_before_size": null,
+              "used_in_if": false,
+              "tags": {
+                "comment": "TrinityCore: \"only for SMSG_PARTY_MEMBER_STATS_FULL, probably arena/bg related\"."
+              }
+            }
+          },
           {
             "struct_member_tag": "Definition",
             "struct_member_content": {
@@ -690209,44 +690368,16 @@
                   "struct_member_content": {
                     "name": "status",
                     "data_type": {
-                      "data_type_tag": "Flag",
-                      "type_name": "GroupMemberOnlineStatus",
-                      "integer_type": "U8",
-                      "tags": {
-                        "version": {
-                          "version_type_tag": "world",
-                          "version_type": {
-                            "world_version_tag": "specific",
-                            "versions": [
-                              {
-                                "major": 1,
-                                "minor": 12,
-                                "patch": null,
-                                "build": null
-                              },
-                              {
-                                "major": 2,
-                                "minor": null,
-                                "patch": null,
-                                "build": null
-                              },
-                              {
-                                "major": 3,
-                                "minor": null,
-                                "patch": null,
-                                "build": null
-                              }
-                            ]
-                          }
-                        }
-                      },
-                      "upcast": false
+                      "data_type_tag": "Integer",
+                      "integer_type": "U16"
                     },
                     "constant_value": null,
                     "used_as_size_in": null,
                     "size_of_fields_before_size": null,
                     "used_in_if": false,
-                    "tags": {}
+                    "tags": {
+                      "comment": "`GroupMemberOnlineStatus` bits, written as a u16. TrinityCore: `uint16(playerStatus)`."
+                    }
                   }
                 }
               ],
@@ -690618,34 +690749,18 @@
                 {
                   "struct_member_tag": "Definition",
                   "struct_member_content": {
-                    "name": "area",
+                    "name": "zone",
                     "data_type": {
-                      "data_type_tag": "Enum",
-                      "type_name": "Area",
-                      "integer_type": "U32",
-                      "tags": {
-                        "version": {
-                          "version_type_tag": "world",
-                          "version_type": {
-                            "world_version_tag": "specific",
-                            "versions": [
-                              {
-                                "major": 3,
-                                "minor": 3,
-                                "patch": 5,
-                                "build": null
-                              }
-                            ]
-                          }
-                        }
-                      },
-                      "upcast": false
+                      "data_type_tag": "Integer",
+                      "integer_type": "U16"
                     },
                     "constant_value": null,
                     "used_as_size_in": null,
                     "size_of_fields_before_size": null,
                     "used_in_if": false,
-                    "tags": {}
+                    "tags": {
+                      "comment": "TrinityCore: `uint16(GetZoneId())`."
+                    }
                   }
                 }
               ],
@@ -691357,12 +691472,17 @@
         "file_info": {
           "file_name": "wow_message_parser/wowm/world/social/smsg_party_member_stats_full.wowm",
           "start_position": 137,
-          "end_position": 206
+          "end_position": 210
         },
         "only_has_io_error": false,
         "has_manual_size_field": false,
         "manual_size_subtraction": null,
         "prepared_objects": [
+          {
+            "name": "unknown",
+            "is_elseif_flag": false,
+            "enum_part_of_separate_statements": false
+          },
           {
             "name": "guid",
             "is_elseif_flag": false,
@@ -691501,8 +691621,7 @@
                 {
                   "name": "status",
                   "is_elseif_flag": false,
-                  "enum_part_of_separate_statements": false,
-                  "definer_type": "Flag"
+                  "enum_part_of_separate_statements": false
                 }
               ],
               "VEHICLE_SEAT": [
@@ -691514,10 +691633,9 @@
               ],
               "ZONE": [
                 {
-                  "name": "area",
+                  "name": "zone",
                   "is_elseif_flag": false,
-                  "enum_part_of_separate_statements": false,
-                  "definer_type": "Enum"
+                  "enum_part_of_separate_statements": false
                 }
               ]
             },

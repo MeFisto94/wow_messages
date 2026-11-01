@@ -423,7 +423,7 @@ smsg SMSG_PARTY_MEMBER_STATS = 0x007E {
     PackedGuid guid;
     GroupUpdateFlags mask;
     if (mask & STATUS) {
-        GroupMemberOnlineStatus status;
+        u16 status;
     }
     if (mask & CUR_HP) {
         u32 current_health;
@@ -444,7 +444,7 @@ smsg SMSG_PARTY_MEMBER_STATS = 0x007E {
         Level16 level;
     }
     if (mask & ZONE) {
-        Area area;
+        u16 zone;
     }
     if (mask & POSITION) {
         u16 position_x;
@@ -507,7 +507,7 @@ If mask contains `STATUS`:
 
 | Offset | Size / Endianness | Type | Name | Comment |
 | ------ | ----------------- | ---- | ---- | ------- |
-| - | 1 / - | [GroupMemberOnlineStatus](groupmemberonlinestatus.md) | status |  |
+| - | 2 / Little | u16 | status | `GroupMemberOnlineStatus` bits, written as a u16. TrinityCore: `uint16(playerStatus)`. |
 
 If mask contains `CUR_HP`:
 
@@ -549,7 +549,7 @@ If mask contains `ZONE`:
 
 | Offset | Size / Endianness | Type | Name | Comment |
 | ------ | ----------------- | ---- | ---- | ------- |
-| - | 4 / - | [Area](area.md) | area |  |
+| - | 2 / Little | u16 | zone | TrinityCore: `uint16(GetZoneId())`. |
 
 If mask contains `POSITION`:
 
@@ -624,3 +624,18 @@ If mask contains `VEHICLE_SEAT`:
 | ------ | ----------------- | ---- | ---- | ------- |
 | - | 4 / Little | u32 | transport |  |
 
+### Examples
+
+#### Example 1
+
+```c
+0, 22, // size
+126, 0, // opcode (126)
+1, 6, // guid: PackedGuid
+199, 0, 0, 0, // mask: GroupUpdateFlags  STATUS| CUR_HP| MAX_HP| LEVEL| ZONE (199)
+5, 0, // status: u16
+120, 0, 0, 0, // current_health: u32
+144, 1, 0, 0, // max_health: u32
+12, 0, // level: Level16
+12, 0, // zone: u16
+```
