@@ -236530,6 +236530,22 @@
                         "used_in_if": false,
                         "tags": {}
                       }
+                    },
+                    {
+                      "struct_member_tag": "Definition",
+                      "struct_member_content": {
+                        "name": "transport_orientation",
+                        "data_type": {
+                          "data_type_tag": "FloatingPoint"
+                        },
+                        "constant_value": null,
+                        "used_as_size_in": null,
+                        "size_of_fields_before_size": null,
+                        "used_in_if": false,
+                        "tags": {
+                          "comment": "The orientation on the transport, or the orientation again without one. TrinityCore: `GetTransOffsetO()`."
+                        }
+                      }
                     }
                   ],
                   "else_if_statements": [],
@@ -237094,7 +237110,7 @@
         "file_info": {
           "file_name": "wow_message_parser/wowm/world/gameobject/smsg_update_object_3_3_5.wowm",
           "start_position": 72,
-          "end_position": 172
+          "end_position": 174
         },
         "only_has_io_error": false,
         "has_manual_size_field": false,
@@ -237396,6 +237412,11 @@
                       },
                       {
                         "name": "transport_offset",
+                        "is_elseif_flag": false,
+                        "enum_part_of_separate_statements": false
+                      },
+                      {
+                        "name": "transport_orientation",
                         "is_elseif_flag": false,
                         "enum_part_of_separate_statements": false
                       }
@@ -252793,6 +252814,22 @@
                                             "used_in_if": false,
                                             "tags": {}
                                           }
+                                        },
+                                        {
+                                          "struct_member_tag": "Definition",
+                                          "struct_member_content": {
+                                            "name": "transport_orientation",
+                                            "data_type": {
+                                              "data_type_tag": "FloatingPoint"
+                                            },
+                                            "constant_value": null,
+                                            "used_as_size_in": null,
+                                            "size_of_fields_before_size": null,
+                                            "used_in_if": false,
+                                            "tags": {
+                                              "comment": "The orientation on the transport, or the orientation again without one. TrinityCore: `GetTransOffsetO()`."
+                                            }
+                                          }
                                         }
                                       ],
                                       "else_if_statements": [],
@@ -253357,7 +253394,7 @@
                             "file_info": {
                               "file_name": "wow_message_parser/wowm/world/gameobject/smsg_update_object_3_3_5.wowm",
                               "start_position": 72,
-                              "end_position": 172
+                              "end_position": 174
                             },
                             "only_has_io_error": false,
                             "has_manual_size_field": false,
@@ -253659,6 +253696,11 @@
                                           },
                                           {
                                             "name": "transport_offset",
+                                            "is_elseif_flag": false,
+                                            "enum_part_of_separate_statements": false
+                                          },
+                                          {
+                                            "name": "transport_orientation",
                                             "is_elseif_flag": false,
                                             "enum_part_of_separate_statements": false
                                           }
@@ -255936,6 +255978,22 @@
                                             "used_in_if": false,
                                             "tags": {}
                                           }
+                                        },
+                                        {
+                                          "struct_member_tag": "Definition",
+                                          "struct_member_content": {
+                                            "name": "transport_orientation",
+                                            "data_type": {
+                                              "data_type_tag": "FloatingPoint"
+                                            },
+                                            "constant_value": null,
+                                            "used_as_size_in": null,
+                                            "size_of_fields_before_size": null,
+                                            "used_in_if": false,
+                                            "tags": {
+                                              "comment": "The orientation on the transport, or the orientation again without one. TrinityCore: `GetTransOffsetO()`."
+                                            }
+                                          }
                                         }
                                       ],
                                       "else_if_statements": [],
@@ -256500,7 +256558,7 @@
                             "file_info": {
                               "file_name": "wow_message_parser/wowm/world/gameobject/smsg_update_object_3_3_5.wowm",
                               "start_position": 72,
-                              "end_position": 172
+                              "end_position": 174
                             },
                             "only_has_io_error": false,
                             "has_manual_size_field": false,
@@ -256804,6 +256862,11 @@
                                             "name": "transport_offset",
                                             "is_elseif_flag": false,
                                             "enum_part_of_separate_statements": false
+                                          },
+                                          {
+                                            "name": "transport_orientation",
+                                            "is_elseif_flag": false,
+                                            "enum_part_of_separate_statements": false
                                           }
                                         ]
                                       },
@@ -257023,8 +257086,8 @@
         "tests": [],
         "file_info": {
           "file_name": "wow_message_parser/wowm/world/gameobject/smsg_update_object_3_3_5.wowm",
-          "start_position": 172,
-          "end_position": 195
+          "start_position": 174,
+          "end_position": 197
         },
         "only_has_io_error": false,
         "has_manual_size_field": false,
@@ -333831,6 +333894,22 @@
                                                         "used_in_if": false,
                                                         "tags": {}
                                                       }
+                                                    },
+                                                    {
+                                                      "struct_member_tag": "Definition",
+                                                      "struct_member_content": {
+                                                        "name": "transport_orientation",
+                                                        "data_type": {
+                                                          "data_type_tag": "FloatingPoint"
+                                                        },
+                                                        "constant_value": null,
+                                                        "used_as_size_in": null,
+                                                        "size_of_fields_before_size": null,
+                                                        "used_in_if": false,
+                                                        "tags": {
+                                                          "comment": "The orientation on the transport, or the orientation again without one. TrinityCore: `GetTransOffsetO()`."
+                                                        }
+                                                      }
                                                     }
                                                   ],
                                                   "else_if_statements": [],
@@ -334395,7 +334474,7 @@
                                         "file_info": {
                                           "file_name": "wow_message_parser/wowm/world/gameobject/smsg_update_object_3_3_5.wowm",
                                           "start_position": 72,
-                                          "end_position": 172
+                                          "end_position": 174
                                         },
                                         "only_has_io_error": false,
                                         "has_manual_size_field": false,
@@ -334697,6 +334776,11 @@
                                                       },
                                                       {
                                                         "name": "transport_offset",
+                                                        "is_elseif_flag": false,
+                                                        "enum_part_of_separate_statements": false
+                                                      },
+                                                      {
+                                                        "name": "transport_orientation",
                                                         "is_elseif_flag": false,
                                                         "enum_part_of_separate_statements": false
                                                       }
@@ -336974,6 +337058,22 @@
                                                         "used_in_if": false,
                                                         "tags": {}
                                                       }
+                                                    },
+                                                    {
+                                                      "struct_member_tag": "Definition",
+                                                      "struct_member_content": {
+                                                        "name": "transport_orientation",
+                                                        "data_type": {
+                                                          "data_type_tag": "FloatingPoint"
+                                                        },
+                                                        "constant_value": null,
+                                                        "used_as_size_in": null,
+                                                        "size_of_fields_before_size": null,
+                                                        "used_in_if": false,
+                                                        "tags": {
+                                                          "comment": "The orientation on the transport, or the orientation again without one. TrinityCore: `GetTransOffsetO()`."
+                                                        }
+                                                      }
                                                     }
                                                   ],
                                                   "else_if_statements": [],
@@ -337538,7 +337638,7 @@
                                         "file_info": {
                                           "file_name": "wow_message_parser/wowm/world/gameobject/smsg_update_object_3_3_5.wowm",
                                           "start_position": 72,
-                                          "end_position": 172
+                                          "end_position": 174
                                         },
                                         "only_has_io_error": false,
                                         "has_manual_size_field": false,
@@ -337842,6 +337942,11 @@
                                                         "name": "transport_offset",
                                                         "is_elseif_flag": false,
                                                         "enum_part_of_separate_statements": false
+                                                      },
+                                                      {
+                                                        "name": "transport_orientation",
+                                                        "is_elseif_flag": false,
+                                                        "enum_part_of_separate_statements": false
                                                       }
                                                     ]
                                                   },
@@ -338061,8 +338166,8 @@
                     "tests": [],
                     "file_info": {
                       "file_name": "wow_message_parser/wowm/world/gameobject/smsg_update_object_3_3_5.wowm",
-                      "start_position": 172,
-                      "end_position": 195
+                      "start_position": 174,
+                      "end_position": 197
                     },
                     "only_has_io_error": false,
                     "has_manual_size_field": false,
@@ -338641,8 +338746,8 @@
             },
             "file_info": {
               "file_name": "wow_message_parser/wowm/world/gameobject/smsg_update_object_3_3_5.wowm",
-              "start_position": 200,
-              "end_position": 288
+              "start_position": 202,
+              "end_position": 290
             }
           },
           {
@@ -338809,15 +338914,15 @@
             },
             "file_info": {
               "file_name": "wow_message_parser/wowm/world/gameobject/smsg_update_object_3_3_5.wowm",
-              "start_position": 290,
-              "end_position": 322
+              "start_position": 292,
+              "end_position": 324
             }
           }
         ],
         "file_info": {
           "file_name": "wow_message_parser/wowm/world/gameobject/smsg_update_object_3_3_5.wowm",
-          "start_position": 195,
-          "end_position": 200
+          "start_position": 197,
+          "end_position": 202
         },
         "only_has_io_error": false,
         "has_manual_size_field": false,
@@ -584670,6 +584775,22 @@
                                                         "used_in_if": false,
                                                         "tags": {}
                                                       }
+                                                    },
+                                                    {
+                                                      "struct_member_tag": "Definition",
+                                                      "struct_member_content": {
+                                                        "name": "transport_orientation",
+                                                        "data_type": {
+                                                          "data_type_tag": "FloatingPoint"
+                                                        },
+                                                        "constant_value": null,
+                                                        "used_as_size_in": null,
+                                                        "size_of_fields_before_size": null,
+                                                        "used_in_if": false,
+                                                        "tags": {
+                                                          "comment": "The orientation on the transport, or the orientation again without one. TrinityCore: `GetTransOffsetO()`."
+                                                        }
+                                                      }
                                                     }
                                                   ],
                                                   "else_if_statements": [],
@@ -585234,7 +585355,7 @@
                                         "file_info": {
                                           "file_name": "wow_message_parser/wowm/world/gameobject/smsg_update_object_3_3_5.wowm",
                                           "start_position": 72,
-                                          "end_position": 172
+                                          "end_position": 174
                                         },
                                         "only_has_io_error": false,
                                         "has_manual_size_field": false,
@@ -585536,6 +585657,11 @@
                                                       },
                                                       {
                                                         "name": "transport_offset",
+                                                        "is_elseif_flag": false,
+                                                        "enum_part_of_separate_statements": false
+                                                      },
+                                                      {
+                                                        "name": "transport_orientation",
                                                         "is_elseif_flag": false,
                                                         "enum_part_of_separate_statements": false
                                                       }
@@ -587813,6 +587939,22 @@
                                                         "used_in_if": false,
                                                         "tags": {}
                                                       }
+                                                    },
+                                                    {
+                                                      "struct_member_tag": "Definition",
+                                                      "struct_member_content": {
+                                                        "name": "transport_orientation",
+                                                        "data_type": {
+                                                          "data_type_tag": "FloatingPoint"
+                                                        },
+                                                        "constant_value": null,
+                                                        "used_as_size_in": null,
+                                                        "size_of_fields_before_size": null,
+                                                        "used_in_if": false,
+                                                        "tags": {
+                                                          "comment": "The orientation on the transport, or the orientation again without one. TrinityCore: `GetTransOffsetO()`."
+                                                        }
+                                                      }
                                                     }
                                                   ],
                                                   "else_if_statements": [],
@@ -588377,7 +588519,7 @@
                                         "file_info": {
                                           "file_name": "wow_message_parser/wowm/world/gameobject/smsg_update_object_3_3_5.wowm",
                                           "start_position": 72,
-                                          "end_position": 172
+                                          "end_position": 174
                                         },
                                         "only_has_io_error": false,
                                         "has_manual_size_field": false,
@@ -588681,6 +588823,11 @@
                                                         "name": "transport_offset",
                                                         "is_elseif_flag": false,
                                                         "enum_part_of_separate_statements": false
+                                                      },
+                                                      {
+                                                        "name": "transport_orientation",
+                                                        "is_elseif_flag": false,
+                                                        "enum_part_of_separate_statements": false
                                                       }
                                                     ]
                                                   },
@@ -588900,8 +589047,8 @@
                     "tests": [],
                     "file_info": {
                       "file_name": "wow_message_parser/wowm/world/gameobject/smsg_update_object_3_3_5.wowm",
-                      "start_position": 172,
-                      "end_position": 195
+                      "start_position": 174,
+                      "end_position": 197
                     },
                     "only_has_io_error": false,
                     "has_manual_size_field": false,

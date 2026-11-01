@@ -231,6 +231,7 @@ struct MovementBlock {
         PackedGuid transport_guid;
         Vector3d position1;
         Vector4d transport_offset;
+        f32 transport_orientation;
     }
     else if (update_flag & HAS_POSITION) {
         Vector4d position2;

@@ -285,6 +285,7 @@ impl crate::Message for SMSG_COMPRESSED_UPDATE_OBJECT {
                                 position1,
                                 transport_guid,
                                 transport_offset,
+                                transport_orientation,
                             } => {
                                 writeln!(s, "                transport_guid = {};", transport_guid.guid()).unwrap();
                                 // position1: Vector3d
@@ -304,6 +305,7 @@ impl crate::Message for SMSG_COMPRESSED_UPDATE_OBJECT {
                                 writeln!(s, "                    orientation = {};", if transport_offset.orientation.to_string().contains('.') { transport_offset.orientation.to_string() } else { format!("{}.0", transport_offset.orientation) }).unwrap();
 
                                 writeln!(s, "                }};").unwrap();
+                                writeln!(s, "                transport_orientation = {};", if transport_orientation.to_string().contains('.') { transport_orientation.to_string() } else { format!("{}.0", transport_orientation) }).unwrap();
                             }
                             crate::wrath::MovementBlock_UpdateFlag_Living::HasPosition {
                                 position2,
@@ -543,6 +545,7 @@ impl crate::Message for SMSG_COMPRESSED_UPDATE_OBJECT {
                                 position1,
                                 transport_guid,
                                 transport_offset,
+                                transport_orientation,
                             } => {
                                 writeln!(s, "                transport_guid = {};", transport_guid.guid()).unwrap();
                                 // position1: Vector3d
@@ -562,6 +565,7 @@ impl crate::Message for SMSG_COMPRESSED_UPDATE_OBJECT {
                                 writeln!(s, "                    orientation = {};", if transport_offset.orientation.to_string().contains('.') { transport_offset.orientation.to_string() } else { format!("{}.0", transport_offset.orientation) }).unwrap();
 
                                 writeln!(s, "                }};").unwrap();
+                                writeln!(s, "                transport_orientation = {};", if transport_orientation.to_string().contains('.') { transport_orientation.to_string() } else { format!("{}.0", transport_orientation) }).unwrap();
                             }
                             crate::wrath::MovementBlock_UpdateFlag_Living::HasPosition {
                                 position2,
@@ -802,6 +806,7 @@ impl crate::Message for SMSG_COMPRESSED_UPDATE_OBJECT {
                                 position1,
                                 transport_guid,
                                 transport_offset,
+                                transport_orientation,
                             } => {
                                 writeln!(s, "                transport_guid = {};", transport_guid.guid()).unwrap();
                                 // position1: Vector3d
@@ -821,6 +826,7 @@ impl crate::Message for SMSG_COMPRESSED_UPDATE_OBJECT {
                                 writeln!(s, "                    orientation = {};", if transport_offset.orientation.to_string().contains('.') { transport_offset.orientation.to_string() } else { format!("{}.0", transport_offset.orientation) }).unwrap();
 
                                 writeln!(s, "                }};").unwrap();
+                                writeln!(s, "                transport_orientation = {};", if transport_orientation.to_string().contains('.') { transport_orientation.to_string() } else { format!("{}.0", transport_orientation) }).unwrap();
                             }
                             crate::wrath::MovementBlock_UpdateFlag_Living::HasPosition {
                                 position2,

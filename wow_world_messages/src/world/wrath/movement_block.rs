@@ -76,6 +76,7 @@ use crate::wrath::{
 ///         PackedGuid transport_guid;
 ///         Vector3d position1;
 ///         Vector4d transport_offset;
+///         f32 transport_orientation;
 ///     }
 ///     else if (update_flag & HAS_POSITION) {
 ///         Vector4d position2;
@@ -310,6 +311,7 @@ impl MovementBlock {
                     position1,
                     transport_guid,
                     transport_offset,
+                    transport_orientation,
                 } => {
                     // transport_guid: PackedGuid
                     crate::util::write_packed_guid(&transport_guid, &mut w)?;
@@ -319,6 +321,9 @@ impl MovementBlock {
 
                     // transport_offset: Vector4d
                     crate::util::vanilla_tbc_wrath_vector4d_write_into_vec(&transport_offset, &mut w)?;
+
+                    // transport_orientation: f32
+                    w.write_all(&transport_orientation.to_le_bytes())?;
 
                 }
                 MovementBlock_UpdateFlag_Living::HasPosition {
@@ -646,10 +651,14 @@ impl MovementBlock {
             // transport_offset: Vector4d
             let transport_offset = crate::util::vanilla_tbc_wrath_vector4d_read(&mut r)?;
 
+            // transport_orientation: f32
+            let transport_orientation = crate::util::read_f32_le(&mut r)?;
+
             Some(MovementBlock_UpdateFlag_Living::Position {
                 position1,
                 transport_guid,
                 transport_offset,
+                transport_orientation,
             })
         }
         else if update_flag.is_has_position() {
@@ -2864,6 +2873,7 @@ pub enum MovementBlock_UpdateFlag_Living {
         position1: Vector3d,
         transport_guid: Guid,
         transport_offset: Vector4d,
+        transport_orientation: f32,
     },
     HasPosition {
         position2: Vector4d,
@@ -2921,6 +2931,7 @@ impl MovementBlock_UpdateFlag_Living {
                 12 // position1: Vector3d
                 + crate::util::packed_guid_size(&transport_guid) // transport_guid: PackedGuid
                 + 16 // transport_offset: Vector4d
+                + 4 // transport_orientation: f32
             }
             Self::HasPosition {
                 ..
