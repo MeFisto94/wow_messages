@@ -41023,10 +41023,6 @@
         },
         "objects_used_in": [
           {
-            "object_name": "CMSG_SET_FACTION_ATWAR",
-            "definer_usage": "RegularUse"
-          },
-          {
             "object_name": "FactionInitializer",
             "definer_usage": "RegularUse"
           }
@@ -131839,22 +131835,6 @@
         },
         "objects_used_in": [
           {
-            "object_name": "CMSG_SET_FACTION_ATWAR",
-            "definer_usage": "RegularUse"
-          },
-          {
-            "object_name": "CMSG_SET_FACTION_INACTIVE",
-            "definer_usage": "RegularUse"
-          },
-          {
-            "object_name": "CMSG_SET_WATCHED_FACTION",
-            "definer_usage": "RegularUse"
-          },
-          {
-            "object_name": "FactionStanding",
-            "definer_usage": "RegularUse"
-          },
-          {
             "object_name": "ForcedReaction",
             "definer_usage": "RegularUse"
           },
@@ -216478,47 +216458,14 @@
         },
         "sizes": {
           "constant_sized": true,
-          "minimum_size": 6,
-          "maximum_size": 6
+          "minimum_size": 8,
+          "maximum_size": 8
         },
         "members": [
           {
             "struct_member_tag": "Definition",
             "struct_member_content": {
-              "name": "faction",
-              "data_type": {
-                "data_type_tag": "Enum",
-                "type_name": "Faction",
-                "integer_type": "U16",
-                "tags": {
-                  "version": {
-                    "version_type_tag": "world",
-                    "version_type": {
-                      "world_version_tag": "specific",
-                      "versions": [
-                        {
-                          "major": 3,
-                          "minor": 3,
-                          "patch": 5,
-                          "build": null
-                        }
-                      ]
-                    }
-                  }
-                },
-                "upcast": false
-              },
-              "constant_value": null,
-              "used_as_size_in": null,
-              "size_of_fields_before_size": null,
-              "used_in_if": false,
-              "tags": {}
-            }
-          },
-          {
-            "struct_member_tag": "Definition",
-            "struct_member_content": {
-              "name": "standing",
+              "name": "reputation_list_id",
               "data_type": {
                 "data_type_tag": "Integer",
                 "integer_type": "U32"
@@ -216527,7 +216474,26 @@
               "used_as_size_in": null,
               "size_of_fields_before_size": null,
               "used_in_if": false,
-              "tags": {}
+              "tags": {
+                "comment": "The faction's place in the reputation list, which is `Faction.dbc`'s reputation index rather than its id. TrinityCore: `ReputationListID`."
+              }
+            }
+          },
+          {
+            "struct_member_tag": "Definition",
+            "struct_member_content": {
+              "name": "standing",
+              "data_type": {
+                "data_type_tag": "Integer",
+                "integer_type": "I32"
+              },
+              "constant_value": null,
+              "used_as_size_in": null,
+              "size_of_fields_before_size": null,
+              "used_in_if": false,
+              "tags": {
+                "comment": "What was earned on top of where the character started. TrinityCore: `FactionState::Standing`."
+              }
             }
           }
         ],
@@ -216550,18 +216516,17 @@
         "tests": [],
         "file_info": {
           "file_name": "wow_message_parser/wowm/world/faction/smsg_set_faction_standing.wowm",
-          "start_position": 1,
-          "end_position": 7
+          "start_position": 9,
+          "end_position": 16
         },
-        "only_has_io_error": false,
+        "only_has_io_error": true,
         "has_manual_size_field": false,
         "manual_size_subtraction": null,
         "prepared_objects": [
           {
-            "name": "faction",
+            "name": "reputation_list_id",
             "is_elseif_flag": false,
-            "enum_part_of_separate_statements": false,
-            "definer_type": "Enum"
+            "enum_part_of_separate_statements": false
           },
           {
             "name": "standing",
@@ -501945,8 +501910,8 @@
         "tests": [],
         "file_info": {
           "file_name": "wow_message_parser/wowm/world/faction/smsg_set_faction_standing.wowm",
-          "start_position": 9,
-          "end_position": 14
+          "start_position": 18,
+          "end_position": 23
         },
         "only_has_io_error": false,
         "has_manual_size_field": false,
@@ -502150,8 +502115,8 @@
         "tests": [],
         "file_info": {
           "file_name": "wow_message_parser/wowm/world/faction/smsg_set_faction_standing.wowm",
-          "start_position": 16,
-          "end_position": 23
+          "start_position": 25,
+          "end_position": 32
         },
         "only_has_io_error": false,
         "has_manual_size_field": false,
@@ -502250,47 +502215,14 @@
                     },
                     "sizes": {
                       "constant_sized": true,
-                      "minimum_size": 6,
-                      "maximum_size": 6
+                      "minimum_size": 8,
+                      "maximum_size": 8
                     },
                     "members": [
                       {
                         "struct_member_tag": "Definition",
                         "struct_member_content": {
-                          "name": "faction",
-                          "data_type": {
-                            "data_type_tag": "Enum",
-                            "type_name": "Faction",
-                            "integer_type": "U16",
-                            "tags": {
-                              "version": {
-                                "version_type_tag": "world",
-                                "version_type": {
-                                  "world_version_tag": "specific",
-                                  "versions": [
-                                    {
-                                      "major": 3,
-                                      "minor": 3,
-                                      "patch": 5,
-                                      "build": null
-                                    }
-                                  ]
-                                }
-                              }
-                            },
-                            "upcast": false
-                          },
-                          "constant_value": null,
-                          "used_as_size_in": null,
-                          "size_of_fields_before_size": null,
-                          "used_in_if": false,
-                          "tags": {}
-                        }
-                      },
-                      {
-                        "struct_member_tag": "Definition",
-                        "struct_member_content": {
-                          "name": "standing",
+                          "name": "reputation_list_id",
                           "data_type": {
                             "data_type_tag": "Integer",
                             "integer_type": "U32"
@@ -502299,7 +502231,26 @@
                           "used_as_size_in": null,
                           "size_of_fields_before_size": null,
                           "used_in_if": false,
-                          "tags": {}
+                          "tags": {
+                            "comment": "The faction's place in the reputation list, which is `Faction.dbc`'s reputation index rather than its id. TrinityCore: `ReputationListID`."
+                          }
+                        }
+                      },
+                      {
+                        "struct_member_tag": "Definition",
+                        "struct_member_content": {
+                          "name": "standing",
+                          "data_type": {
+                            "data_type_tag": "Integer",
+                            "integer_type": "I32"
+                          },
+                          "constant_value": null,
+                          "used_as_size_in": null,
+                          "size_of_fields_before_size": null,
+                          "used_in_if": false,
+                          "tags": {
+                            "comment": "What was earned on top of where the character started. TrinityCore: `FactionState::Standing`."
+                          }
                         }
                       }
                     ],
@@ -502322,18 +502273,17 @@
                     "tests": [],
                     "file_info": {
                       "file_name": "wow_message_parser/wowm/world/faction/smsg_set_faction_standing.wowm",
-                      "start_position": 1,
-                      "end_position": 7
+                      "start_position": 9,
+                      "end_position": 16
                     },
-                    "only_has_io_error": false,
+                    "only_has_io_error": true,
                     "has_manual_size_field": false,
                     "manual_size_subtraction": null,
                     "prepared_objects": [
                       {
-                        "name": "faction",
+                        "name": "reputation_list_id",
                         "is_elseif_flag": false,
-                        "enum_part_of_separate_statements": false,
-                        "definer_type": "Enum"
+                        "enum_part_of_separate_statements": false
                       },
                       {
                         "name": "standing",
@@ -502374,11 +502324,131 @@
             }
           }
         },
-        "tests": [],
+        "tests": [
+          {
+            "subject": "SMSG_SET_FACTION_STANDING",
+            "members": [
+              {
+                "variable_name": "refer_a_friend_bonus",
+                "value": {
+                  "test_value_tag": "FloatingPoint",
+                  "content": {
+                    "value": 0.0,
+                    "original_string": "0.0"
+                  }
+                },
+                "tags": {}
+              },
+              {
+                "variable_name": "any_rank_increased",
+                "value": {
+                  "test_value_tag": "Bool",
+                  "content": false
+                },
+                "tags": {}
+              },
+              {
+                "variable_name": "amount_of_faction_standings",
+                "value": {
+                  "test_value_tag": "Integer",
+                  "content": {
+                    "value": "1",
+                    "original_string": "1"
+                  }
+                },
+                "tags": {}
+              },
+              {
+                "variable_name": "faction_standings",
+                "value": {
+                  "test_value_tag": "ArrayOfSubObject",
+                  "content": {
+                    "type_name": "FactionStanding",
+                    "members": [
+                      [
+                        {
+                          "variable_name": "reputation_list_id",
+                          "value": {
+                            "test_value_tag": "Integer",
+                            "content": {
+                              "value": "12",
+                              "original_string": "12"
+                            }
+                          },
+                          "tags": {}
+                        },
+                        {
+                          "variable_name": "standing",
+                          "value": {
+                            "test_value_tag": "Integer",
+                            "content": {
+                              "value": "250",
+                              "original_string": "250"
+                            }
+                          },
+                          "tags": {}
+                        }
+                      ]
+                    ],
+                    "size": {
+                      "array_size_tag": "Variable",
+                      "size": "amount_of_faction_standings"
+                    }
+                  }
+                },
+                "tags": {}
+              }
+            ],
+            "raw_bytes": [
+              0,
+              19,
+              36,
+              1,
+              0,
+              0,
+              0,
+              0,
+              0,
+              1,
+              0,
+              0,
+              0,
+              12,
+              0,
+              0,
+              0,
+              250,
+              0,
+              0,
+              0
+            ],
+            "tags": {
+              "version": {
+                "version_type_tag": "world",
+                "version_type": {
+                  "world_version_tag": "specific",
+                  "versions": [
+                    {
+                      "major": 3,
+                      "minor": 3,
+                      "patch": 5,
+                      "build": null
+                    }
+                  ]
+                }
+              }
+            },
+            "file_info": {
+              "file_name": "wow_message_parser/wowm/world/faction/smsg_set_faction_standing.wowm",
+              "start_position": 45,
+              "end_position": 65
+            }
+          }
+        ],
         "file_info": {
           "file_name": "wow_message_parser/wowm/world/faction/smsg_set_faction_standing.wowm",
-          "start_position": 25,
-          "end_position": 34
+          "start_position": 34,
+          "end_position": 43
         },
         "only_has_io_error": false,
         "has_manual_size_field": false,
@@ -502667,74 +502737,42 @@
         },
         "sizes": {
           "constant_sized": true,
-          "minimum_size": 3,
-          "maximum_size": 3
+          "minimum_size": 5,
+          "maximum_size": 5
         },
         "members": [
           {
             "struct_member_tag": "Definition",
             "struct_member_content": {
-              "name": "faction",
+              "name": "reputation_list_id",
               "data_type": {
-                "data_type_tag": "Enum",
-                "type_name": "Faction",
-                "integer_type": "U16",
-                "tags": {
-                  "version": {
-                    "version_type_tag": "world",
-                    "version_type": {
-                      "world_version_tag": "specific",
-                      "versions": [
-                        {
-                          "major": 3,
-                          "minor": 3,
-                          "patch": 5,
-                          "build": null
-                        }
-                      ]
-                    }
-                  }
-                },
-                "upcast": false
+                "data_type_tag": "Integer",
+                "integer_type": "U32"
               },
               "constant_value": null,
               "used_as_size_in": null,
               "size_of_fields_before_size": null,
               "used_in_if": false,
-              "tags": {}
+              "tags": {
+                "comment": "The faction's place in the reputation list rather than its id. TrinityCore: `uint32 repListID`."
+              }
             }
           },
           {
             "struct_member_tag": "Definition",
             "struct_member_content": {
-              "name": "flags",
+              "name": "at_war",
               "data_type": {
-                "data_type_tag": "Flag",
-                "type_name": "FactionFlag",
-                "integer_type": "U8",
-                "tags": {
-                  "version": {
-                    "version_type_tag": "world",
-                    "version_type": {
-                      "world_version_tag": "specific",
-                      "versions": [
-                        {
-                          "major": 3,
-                          "minor": null,
-                          "patch": null,
-                          "build": null
-                        }
-                      ]
-                    }
-                  }
-                },
-                "upcast": false
+                "data_type_tag": "Bool",
+                "integer_type": "U8"
               },
               "constant_value": null,
               "used_as_size_in": null,
               "size_of_fields_before_size": null,
               "used_in_if": false,
-              "tags": {}
+              "tags": {
+                "comment": "TrinityCore: any value but zero declares war."
+              }
             }
           }
         ],
@@ -502754,27 +502792,84 @@
             }
           }
         },
-        "tests": [],
+        "tests": [
+          {
+            "subject": "CMSG_SET_FACTION_ATWAR",
+            "members": [
+              {
+                "variable_name": "reputation_list_id",
+                "value": {
+                  "test_value_tag": "Integer",
+                  "content": {
+                    "value": "19",
+                    "original_string": "19"
+                  }
+                },
+                "tags": {}
+              },
+              {
+                "variable_name": "at_war",
+                "value": {
+                  "test_value_tag": "Bool",
+                  "content": true
+                },
+                "tags": {}
+              }
+            ],
+            "raw_bytes": [
+              0,
+              9,
+              37,
+              1,
+              0,
+              0,
+              19,
+              0,
+              0,
+              0,
+              1
+            ],
+            "tags": {
+              "version": {
+                "version_type_tag": "world",
+                "version_type": {
+                  "world_version_tag": "specific",
+                  "versions": [
+                    {
+                      "major": 3,
+                      "minor": 3,
+                      "patch": 5,
+                      "build": null
+                    }
+                  ]
+                }
+              }
+            },
+            "file_info": {
+              "file_name": "wow_message_parser/wowm/world/faction/cmsg_set_faction_atwar.wowm",
+              "start_position": 59,
+              "end_position": 69
+            }
+          }
+        ],
         "file_info": {
           "file_name": "wow_message_parser/wowm/world/faction/cmsg_set_faction_atwar.wowm",
           "start_position": 50,
-          "end_position": 55
+          "end_position": 57
         },
-        "only_has_io_error": false,
+        "only_has_io_error": true,
         "has_manual_size_field": false,
         "manual_size_subtraction": null,
         "prepared_objects": [
           {
-            "name": "faction",
+            "name": "reputation_list_id",
             "is_elseif_flag": false,
-            "enum_part_of_separate_statements": false,
-            "definer_type": "Enum"
+            "enum_part_of_separate_statements": false
           },
           {
-            "name": "flags",
+            "name": "at_war",
             "is_elseif_flag": false,
-            "enum_part_of_separate_statements": false,
-            "definer_type": "Flag"
+            "enum_part_of_separate_statements": false
           }
         ],
         "optional": null
@@ -697164,41 +697259,25 @@
         },
         "sizes": {
           "constant_sized": true,
-          "minimum_size": 3,
-          "maximum_size": 3
+          "minimum_size": 5,
+          "maximum_size": 5
         },
         "members": [
           {
             "struct_member_tag": "Definition",
             "struct_member_content": {
-              "name": "faction",
+              "name": "reputation_list_id",
               "data_type": {
-                "data_type_tag": "Enum",
-                "type_name": "Faction",
-                "integer_type": "U16",
-                "tags": {
-                  "version": {
-                    "version_type_tag": "world",
-                    "version_type": {
-                      "world_version_tag": "specific",
-                      "versions": [
-                        {
-                          "major": 3,
-                          "minor": 3,
-                          "patch": 5,
-                          "build": null
-                        }
-                      ]
-                    }
-                  }
-                },
-                "upcast": false
+                "data_type_tag": "Integer",
+                "integer_type": "U32"
               },
               "constant_value": null,
               "used_as_size_in": null,
               "size_of_fields_before_size": null,
               "used_in_if": false,
-              "tags": {}
+              "tags": {
+                "comment": "The faction's place in the reputation list rather than its id. TrinityCore: `uint32 replistid`."
+              }
             }
           },
           {
@@ -697233,21 +697312,79 @@
             }
           }
         },
-        "tests": [],
+        "tests": [
+          {
+            "subject": "CMSG_SET_FACTION_INACTIVE",
+            "members": [
+              {
+                "variable_name": "reputation_list_id",
+                "value": {
+                  "test_value_tag": "Integer",
+                  "content": {
+                    "value": "19",
+                    "original_string": "19"
+                  }
+                },
+                "tags": {}
+              },
+              {
+                "variable_name": "inactive",
+                "value": {
+                  "test_value_tag": "Bool",
+                  "content": true
+                },
+                "tags": {}
+              }
+            ],
+            "raw_bytes": [
+              0,
+              9,
+              23,
+              3,
+              0,
+              0,
+              19,
+              0,
+              0,
+              0,
+              1
+            ],
+            "tags": {
+              "version": {
+                "version_type_tag": "world",
+                "version_type": {
+                  "world_version_tag": "specific",
+                  "versions": [
+                    {
+                      "major": 3,
+                      "minor": 3,
+                      "patch": 5,
+                      "build": null
+                    }
+                  ]
+                }
+              }
+            },
+            "file_info": {
+              "file_name": "wow_message_parser/wowm/world/faction/cmsg_set_faction_inactive.wowm",
+              "start_position": 16,
+              "end_position": 26
+            }
+          }
+        ],
         "file_info": {
           "file_name": "wow_message_parser/wowm/world/faction/cmsg_set_faction_inactive.wowm",
-          "start_position": 1,
-          "end_position": 6
+          "start_position": 8,
+          "end_position": 14
         },
-        "only_has_io_error": false,
+        "only_has_io_error": true,
         "has_manual_size_field": false,
         "manual_size_subtraction": null,
         "prepared_objects": [
           {
-            "name": "faction",
+            "name": "reputation_list_id",
             "is_elseif_flag": false,
-            "enum_part_of_separate_statements": false,
-            "definer_type": "Enum"
+            "enum_part_of_separate_statements": false
           },
           {
             "name": "inactive",
@@ -697495,41 +697632,25 @@
         },
         "sizes": {
           "constant_sized": true,
-          "minimum_size": 2,
-          "maximum_size": 2
+          "minimum_size": 4,
+          "maximum_size": 4
         },
         "members": [
           {
             "struct_member_tag": "Definition",
             "struct_member_content": {
-              "name": "faction",
+              "name": "reputation_list_id",
               "data_type": {
-                "data_type_tag": "Enum",
-                "type_name": "Faction",
-                "integer_type": "U16",
-                "tags": {
-                  "version": {
-                    "version_type_tag": "world",
-                    "version_type": {
-                      "world_version_tag": "specific",
-                      "versions": [
-                        {
-                          "major": 3,
-                          "minor": 3,
-                          "patch": 5,
-                          "build": null
-                        }
-                      ]
-                    }
-                  }
-                },
-                "upcast": false
+                "data_type_tag": "Integer",
+                "integer_type": "U32"
               },
               "constant_value": null,
               "used_as_size_in": null,
               "size_of_fields_before_size": null,
               "used_in_if": false,
-              "tags": {}
+              "tags": {
+                "comment": "The faction's place in the reputation list, and `0xFFFFFFFF` for none. TrinityCore stores it as\n`PLAYER_FIELD_WATCHED_FACTION_INDEX`."
+              }
             }
           }
         ],
@@ -697549,21 +697670,70 @@
             }
           }
         },
-        "tests": [],
+        "tests": [
+          {
+            "subject": "CMSG_SET_WATCHED_FACTION",
+            "members": [
+              {
+                "variable_name": "reputation_list_id",
+                "value": {
+                  "test_value_tag": "Integer",
+                  "content": {
+                    "value": "19",
+                    "original_string": "19"
+                  }
+                },
+                "tags": {}
+              }
+            ],
+            "raw_bytes": [
+              0,
+              8,
+              24,
+              3,
+              0,
+              0,
+              19,
+              0,
+              0,
+              0
+            ],
+            "tags": {
+              "version": {
+                "version_type_tag": "world",
+                "version_type": {
+                  "world_version_tag": "specific",
+                  "versions": [
+                    {
+                      "major": 3,
+                      "minor": 3,
+                      "patch": 5,
+                      "build": null
+                    }
+                  ]
+                }
+              }
+            },
+            "file_info": {
+              "file_name": "wow_message_parser/wowm/world/faction/cmsg_set_watched_faction.wowm",
+              "start_position": 21,
+              "end_position": 29
+            }
+          }
+        ],
         "file_info": {
           "file_name": "wow_message_parser/wowm/world/faction/cmsg_set_watched_faction.wowm",
-          "start_position": 7,
-          "end_position": 11
+          "start_position": 13,
+          "end_position": 19
         },
-        "only_has_io_error": false,
+        "only_has_io_error": true,
         "has_manual_size_field": false,
         "manual_size_subtraction": null,
         "prepared_objects": [
           {
-            "name": "faction",
+            "name": "reputation_list_id",
             "is_elseif_flag": false,
-            "enum_part_of_separate_statements": false,
-            "definer_type": "Enum"
+            "enum_part_of_separate_statements": false
           }
         ],
         "optional": null

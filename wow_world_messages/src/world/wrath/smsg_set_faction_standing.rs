@@ -1,10 +1,8 @@
 use std::io::{Read, Write};
 
-use crate::wrath::{
-    Faction, FactionStanding,
-};
+use crate::wrath::FactionStanding;
 
-/// Auto generated from the original `wowm` in file [`wow_message_parser/wowm/world/faction/smsg_set_faction_standing.wowm:25`](https://github.com/gtker/wow_messages/tree/main/wow_message_parser/wowm/world/faction/smsg_set_faction_standing.wowm#L25):
+/// Auto generated from the original `wowm` in file [`wow_message_parser/wowm/world/faction/smsg_set_faction_standing.wowm:34`](https://github.com/gtker/wow_messages/tree/main/wow_message_parser/wowm/world/faction/smsg_set_faction_standing.wowm#L34):
 /// ```text
 /// smsg SMSG_SET_FACTION_STANDING = 0x0124 {
 ///     f32 refer_a_friend_bonus;
@@ -42,7 +40,7 @@ impl SMSG_SET_FACTION_STANDING {
         let faction_standings = {
             let mut faction_standings = Vec::with_capacity(amount_of_faction_standings as usize);
 
-            let allocation_size = u64::from(amount_of_faction_standings) * 6;
+            let allocation_size = u64::from(amount_of_faction_standings) * 8;
             if allocation_size > crate::errors::MAX_ALLOCATION_SIZE_WRATH {
                 return Err(crate::errors::ParseErrorKind::AllocationTooLargeError(allocation_size));
             }
@@ -68,61 +66,6 @@ impl crate::Message for SMSG_SET_FACTION_STANDING {
     #[cfg(feature = "print-testcase")]
     fn message_name(&self) -> &'static str {
         "SMSG_SET_FACTION_STANDING"
-    }
-
-    #[cfg(feature = "print-testcase")]
-    fn to_test_case_string(&self) -> Option<String> {
-        use std::fmt::Write;
-        use crate::traits::Message;
-
-        let mut s = String::new();
-
-        writeln!(s, "test SMSG_SET_FACTION_STANDING {{").unwrap();
-        // Members
-        writeln!(s, "    refer_a_friend_bonus = {};", if self.refer_a_friend_bonus.to_string().contains('.') { self.refer_a_friend_bonus.to_string() } else { format!("{}.0", self.refer_a_friend_bonus) }).unwrap();
-        writeln!(s, "    any_rank_increased = {};", if self.any_rank_increased { "TRUE" } else { "FALSE" }).unwrap();
-        writeln!(s, "    amount_of_faction_standings = {};", self.faction_standings.len()).unwrap();
-        writeln!(s, "    faction_standings = [").unwrap();
-        for v in self.faction_standings.as_slice() {
-            writeln!(s, "        {{").unwrap();
-            // Members
-            writeln!(s, "            faction = {};", v.faction.as_test_case_value()).unwrap();
-            writeln!(s, "            standing = {};", v.standing).unwrap();
-
-            writeln!(s, "        }},").unwrap();
-        }
-        writeln!(s, "    ];").unwrap();
-
-        writeln!(s, "}} [").unwrap();
-
-        let [a, b] = (u16::try_from(self.size() + 2).unwrap()).to_be_bytes();
-        writeln!(s, "    {a:#04X}, {b:#04X}, /* size */").unwrap();
-        let [a, b] = 292_u16.to_le_bytes();
-        writeln!(s, "    {a:#04X}, {b:#04X}, /* opcode */").unwrap();
-        let mut bytes: Vec<u8> = Vec::new();
-        self.write_into_vec(&mut bytes).unwrap();
-        let mut bytes = bytes.into_iter();
-
-        crate::util::write_bytes(&mut s, &mut bytes, 4, "refer_a_friend_bonus", "    ");
-        crate::util::write_bytes(&mut s, &mut bytes, 1, "any_rank_increased", "    ");
-        crate::util::write_bytes(&mut s, &mut bytes, 4, "amount_of_faction_standings", "    ");
-        if !self.faction_standings.is_empty() {
-            writeln!(s, "    /* faction_standings: FactionStanding[amount_of_faction_standings] start */").unwrap();
-            for (i, v) in self.faction_standings.iter().enumerate() {
-                writeln!(s, "    /* faction_standings: FactionStanding[amount_of_faction_standings] {i} start */").unwrap();
-                crate::util::write_bytes(&mut s, &mut bytes, 2, "faction", "        ");
-                crate::util::write_bytes(&mut s, &mut bytes, 4, "standing", "        ");
-                writeln!(s, "    /* faction_standings: FactionStanding[amount_of_faction_standings] {i} end */").unwrap();
-            }
-            writeln!(s, "    /* faction_standings: FactionStanding[amount_of_faction_standings] end */").unwrap();
-        }
-
-
-        writeln!(s, "] {{").unwrap();
-        writeln!(s, "    versions = \"{}\";", std::env::var("WOWM_TEST_CASE_WORLD_VERSION").unwrap_or("3.3.5".to_string())).unwrap();
-        writeln!(s, "}}\n").unwrap();
-
-        Some(s)
     }
 
     fn size_without_header(&self) -> u32 {
@@ -161,7 +104,96 @@ impl SMSG_SET_FACTION_STANDING {
         4 // refer_a_friend_bonus: f32
         + 1 // any_rank_increased: Bool
         + 4 // amount_of_faction_standings: u32
-        + self.faction_standings.len() * 6 // faction_standings: FactionStanding[amount_of_faction_standings]
+        + self.faction_standings.len() * 8 // faction_standings: FactionStanding[amount_of_faction_standings]
     }
+}
+
+#[cfg(test)]
+mod test {
+    #![allow(clippy::missing_const_for_fn)]
+    use super::SMSG_SET_FACTION_STANDING;
+    use super::*;
+    use super::super::*;
+    use crate::wrath::opcodes::ServerOpcodeMessage;
+    use crate::wrath::{ClientMessage, ServerMessage};
+
+    const HEADER_SIZE: usize = 2 + 2;
+    const RAW0: [u8; 21] = [ 0x00, 0x13, 0x24, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00,
+         0x01, 0x00, 0x00, 0x00, 0x0C, 0x00, 0x00, 0x00, 0xFA, 0x00, 0x00, 0x00, ];
+
+    pub(crate) fn expected0() -> SMSG_SET_FACTION_STANDING {
+        SMSG_SET_FACTION_STANDING {
+            refer_a_friend_bonus: 0_f32,
+            any_rank_increased: false, 
+            faction_standings: vec![
+                FactionStanding {
+                    reputation_list_id: 0xC,
+                    standing: 0xFA,
+                },
+            ],
+        }
+
+    }
+
+    // Generated from `wow_message_parser/wowm/world/faction/smsg_set_faction_standing.wowm` line 45.
+    #[cfg(feature = "sync")]
+    #[cfg_attr(feature = "sync", test)]
+    fn smsg_set_faction_standing0() {
+        let expected = expected0();
+        let t = ServerOpcodeMessage::read_unencrypted(&mut std::io::Cursor::new(&RAW0)).unwrap();
+        let t = match t {
+            ServerOpcodeMessage::SMSG_SET_FACTION_STANDING(t) => t,
+            opcode => panic!("incorrect opcode. Expected SMSG_SET_FACTION_STANDING, got {opcode:#?}"),
+        };
+
+        assert_eq!(t.as_ref(), &expected);
+        assert_eq!(t.size() + HEADER_SIZE, RAW0.len());
+
+        let mut dest = Vec::with_capacity(RAW0.len());
+        expected.write_unencrypted_server(&mut std::io::Cursor::new(&mut dest)).unwrap();
+
+        assert_eq!(dest, RAW0);
+    }
+
+    // Generated from `wow_message_parser/wowm/world/faction/smsg_set_faction_standing.wowm` line 45.
+    #[cfg(feature = "tokio")]
+    #[cfg_attr(feature = "tokio", tokio::test)]
+    async fn tokio_smsg_set_faction_standing0() {
+        let expected = expected0();
+        let t = ServerOpcodeMessage::tokio_read_unencrypted(&mut std::io::Cursor::new(&RAW0)).await.unwrap();
+        let t = match t {
+            ServerOpcodeMessage::SMSG_SET_FACTION_STANDING(t) => t,
+            opcode => panic!("incorrect opcode. Expected SMSG_SET_FACTION_STANDING, got {opcode:#?}"),
+        };
+
+        assert_eq!(t.as_ref(), &expected);
+        assert_eq!(t.size() + HEADER_SIZE, RAW0.len());
+
+        let mut dest = Vec::with_capacity(RAW0.len());
+        expected.tokio_write_unencrypted_server(&mut std::io::Cursor::new(&mut dest)).await.unwrap();
+
+        assert_eq!(dest, RAW0);
+    }
+
+    // Generated from `wow_message_parser/wowm/world/faction/smsg_set_faction_standing.wowm` line 45.
+    #[cfg(feature = "async-std")]
+    #[cfg_attr(feature = "async-std", async_std::test)]
+    async fn astd_smsg_set_faction_standing0() {
+        let expected = expected0();
+        let t = ServerOpcodeMessage::astd_read_unencrypted(&mut async_std::io::Cursor::new(&RAW0)).await.unwrap();
+        let t = match t {
+            ServerOpcodeMessage::SMSG_SET_FACTION_STANDING(t) => t,
+            opcode => panic!("incorrect opcode. Expected SMSG_SET_FACTION_STANDING, got {opcode:#?}"),
+        };
+
+        assert_eq!(t.as_ref(), &expected);
+        assert_eq!(t.size() + HEADER_SIZE, RAW0.len());
+
+        let mut dest = Vec::with_capacity(RAW0.len());
+        expected.astd_write_unencrypted_server(&mut async_std::io::Cursor::new(&mut dest)).await.unwrap();
+
+        assert_eq!(dest, RAW0);
+    }
+
 }
 

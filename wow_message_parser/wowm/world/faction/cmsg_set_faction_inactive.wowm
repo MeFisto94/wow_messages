@@ -2,5 +2,25 @@ cmsg CMSG_SET_FACTION_INACTIVE = 0x0317 {
     Faction faction;
     Bool inactive;
 } {
-    paste_versions = "1.12 2.4.3 3.3.5";
+    paste_versions = "1.12 2.4.3";
+}
+
+cmsg CMSG_SET_FACTION_INACTIVE = 0x0317 {
+    /// The faction's place in the reputation list rather than its id. TrinityCore: `uint32 replistid`.
+    u32 reputation_list_id;
+    Bool inactive;
+} {
+    versions = "3.3.5";
+}
+
+test CMSG_SET_FACTION_INACTIVE {
+    reputation_list_id = 19;
+    inactive = TRUE;
+} [
+    0x00, 0x09, /* size */
+    0x17, 0x03, 0x00, 0x00, /* opcode */
+    0x13, 0x00, 0x00, 0x00, /* reputation_list_id */
+    0x01, /* inactive */
+] {
+    versions = "3.3.5";
 }

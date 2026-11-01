@@ -7,7 +7,25 @@ cmsg CMSG_SET_WATCHED_FACTION = 0x0318 {
 cmsg CMSG_SET_WATCHED_FACTION = 0x0318 {
     Faction faction;
 } {
-    paste_versions = "1.12 2.4.3 3.3.5";
+    paste_versions = "1.12 2.4.3";
+}
+
+cmsg CMSG_SET_WATCHED_FACTION = 0x0318 {
+    /// The faction's place in the reputation list, and `0xFFFFFFFF` for none. TrinityCore stores it as
+    /// `PLAYER_FIELD_WATCHED_FACTION_INDEX`.
+    u32 reputation_list_id;
+} {
+    versions = "3.3.5";
+}
+
+test CMSG_SET_WATCHED_FACTION {
+    reputation_list_id = 19;
+} [
+    0x00, 0x08, /* size */
+    0x18, 0x03, 0x00, 0x00, /* opcode */
+    0x13, 0x00, 0x00, 0x00, /* reputation_list_id */
+] {
+    versions = "3.3.5";
 }
 
 

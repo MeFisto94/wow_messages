@@ -67,5 +67,4 @@ The basic type is `u8`, a 1 byte (8 bit) integer.
 | `SPECIAL` | 128 (0x80) | horde and alliance home cities and their northrend allies have this flag |
 
 Used in:
-* [CMSG_SET_FACTION_ATWAR](cmsg_set_faction_atwar.md)
 * [FactionInitializer](factioninitializer.md)

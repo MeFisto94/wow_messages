@@ -3,7 +3,16 @@ struct FactionStanding {
     /* TODO NARROW_TYPE Units? */
     u32 standing;
 } {
-    paste_versions = "1.12 2.4.3 3.3.5";
+    paste_versions = "1.12 2.4.3";
+}
+
+struct FactionStanding {
+    /// The faction's place in the reputation list, which is `Faction.dbc`'s reputation index rather than its id. TrinityCore: `ReputationListID`.
+    u32 reputation_list_id;
+    /// What was earned on top of where the character started. TrinityCore: `FactionState::Standing`.
+    i32 standing;
+} {
+    versions = "3.3.5";
 }
 
 smsg SMSG_SET_FACTION_STANDING = 0x0124 {
@@ -30,5 +39,27 @@ smsg SMSG_SET_FACTION_STANDING = 0x0124 {
     u32 amount_of_faction_standings;
     FactionStanding[amount_of_faction_standings] faction_standings;
 } {
+    versions = "3.3.5";
+}
+
+test SMSG_SET_FACTION_STANDING {
+    refer_a_friend_bonus = 0.0;
+    any_rank_increased = FALSE;
+    amount_of_faction_standings = 1;
+    faction_standings = [
+        {
+            reputation_list_id = 12;
+            standing = 250;
+        },
+    ];
+} [
+    0x00, 0x13, /* size */
+    0x24, 0x01, /* opcode */
+    0x00, 0x00, 0x00, 0x00, /* refer_a_friend_bonus */
+    0x00, /* any_rank_increased */
+    0x01, 0x00, 0x00, 0x00, /* amount_of_faction_standings */
+    0x0C, 0x00, 0x00, 0x00, /* faction_standings[0].reputation_list_id */
+    0xFA, 0x00, 0x00, 0x00, /* faction_standings[0].standing */
+] {
     versions = "3.3.5";
 }

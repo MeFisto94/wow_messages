@@ -48,8 +48,22 @@ flag FactionFlag : u8 {
 }
 
 cmsg CMSG_SET_FACTION_ATWAR = 0x0125 {
-    Faction faction;
-    FactionFlag flags;
+    /// The faction's place in the reputation list rather than its id. TrinityCore: `uint32 repListID`.
+    u32 reputation_list_id;
+    /// TrinityCore: any value but zero declares war.
+    Bool at_war;
 } {
+    versions = "3.3.5";
+}
+
+test CMSG_SET_FACTION_ATWAR {
+    reputation_list_id = 19;
+    at_war = TRUE;
+} [
+    0x00, 0x09, /* size */
+    0x25, 0x01, 0x00, 0x00, /* opcode */
+    0x13, 0x00, 0x00, 0x00, /* reputation_list_id */
+    0x01, /* at_war */
+] {
     versions = "3.3.5";
 }

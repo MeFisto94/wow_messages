@@ -1901,10 +1901,6 @@ The basic type is `u16`, a 2 byte (16 bit) little endian integer.
 | `CTF_FLAG_HORDE_2` | 1160 (0x488) |  | CTF - Flag - Horde 2 |
 
 Used in:
-* [CMSG_SET_FACTION_ATWAR](cmsg_set_faction_atwar.md)
-* [CMSG_SET_FACTION_INACTIVE](cmsg_set_faction_inactive.md)
-* [CMSG_SET_WATCHED_FACTION](cmsg_set_watched_faction.md)
-* [FactionStanding](factionstanding.md)
 * [ForcedReaction](forcedreaction.md)
 * [SMSG_ITEM_QUERY_SINGLE_RESPONSE](smsg_item_query_single_response.md)
 * [SMSG_QUEST_QUERY_RESPONSE](smsg_quest_query_response.md)

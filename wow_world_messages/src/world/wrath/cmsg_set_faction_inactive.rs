@@ -1,35 +1,34 @@
 use std::io::{Read, Write};
 
-use crate::wrath::Faction;
-
-/// Auto generated from the original `wowm` in file [`wow_message_parser/wowm/world/faction/cmsg_set_faction_inactive.wowm:1`](https://github.com/gtker/wow_messages/tree/main/wow_message_parser/wowm/world/faction/cmsg_set_faction_inactive.wowm#L1):
+/// Auto generated from the original `wowm` in file [`wow_message_parser/wowm/world/faction/cmsg_set_faction_inactive.wowm:8`](https://github.com/gtker/wow_messages/tree/main/wow_message_parser/wowm/world/faction/cmsg_set_faction_inactive.wowm#L8):
 /// ```text
 /// cmsg CMSG_SET_FACTION_INACTIVE = 0x0317 {
-///     Faction faction;
+///     u32 reputation_list_id;
 ///     Bool inactive;
 /// }
 /// ```
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord, Default)]
 pub struct CMSG_SET_FACTION_INACTIVE {
-    pub faction: Faction,
+    /// The faction's place in the reputation list rather than its id. TrinityCore: `uint32 replistid`.
+    pub reputation_list_id: u32,
     pub inactive: bool,
 }
 
 impl crate::private::Sealed for CMSG_SET_FACTION_INACTIVE {}
 impl CMSG_SET_FACTION_INACTIVE {
     fn read_inner(mut r: &mut &[u8], body_size: u32) -> Result<Self, crate::errors::ParseErrorKind> {
-        if body_size != 3 {
+        if body_size != 5 {
             return Err(crate::errors::ParseErrorKind::InvalidSize);
         }
 
-        // faction: Faction
-        let faction = crate::util::read_u16_le(&mut r)?.try_into()?;
+        // reputation_list_id: u32
+        let reputation_list_id = crate::util::read_u32_le(&mut r)?;
 
         // inactive: Bool
         let inactive = crate::util::read_bool_u8(&mut r)?;
 
         Ok(Self {
-            faction,
+            reputation_list_id,
             inactive,
         })
     }
@@ -44,46 +43,13 @@ impl crate::Message for CMSG_SET_FACTION_INACTIVE {
         "CMSG_SET_FACTION_INACTIVE"
     }
 
-    #[cfg(feature = "print-testcase")]
-    fn to_test_case_string(&self) -> Option<String> {
-        use std::fmt::Write;
-        use crate::traits::Message;
-
-        let mut s = String::new();
-
-        writeln!(s, "test CMSG_SET_FACTION_INACTIVE {{").unwrap();
-        // Members
-        writeln!(s, "    faction = {};", self.faction.as_test_case_value()).unwrap();
-        writeln!(s, "    inactive = {};", if self.inactive { "TRUE" } else { "FALSE" }).unwrap();
-
-        writeln!(s, "}} [").unwrap();
-
-        let [a, b] = 7_u16.to_be_bytes();
-        writeln!(s, "    {a:#04X}, {b:#04X}, /* size */").unwrap();
-        let [a, b, c, d] = 791_u32.to_le_bytes();
-        writeln!(s, "    {a:#04X}, {b:#04X}, {c:#04X}, {d:#04X}, /* opcode */").unwrap();
-        let mut bytes: Vec<u8> = Vec::new();
-        self.write_into_vec(&mut bytes).unwrap();
-        let mut bytes = bytes.into_iter();
-
-        crate::util::write_bytes(&mut s, &mut bytes, 2, "faction", "    ");
-        crate::util::write_bytes(&mut s, &mut bytes, 1, "inactive", "    ");
-
-
-        writeln!(s, "] {{").unwrap();
-        writeln!(s, "    versions = \"{}\";", std::env::var("WOWM_TEST_CASE_WORLD_VERSION").unwrap_or("3.3.5".to_string())).unwrap();
-        writeln!(s, "}}\n").unwrap();
-
-        Some(s)
-    }
-
     fn size_without_header(&self) -> u32 {
-        3
+        5
     }
 
     fn write_into_vec(&self, mut w: impl Write) -> Result<(), std::io::Error> {
-        // faction: Faction
-        w.write_all(&(self.faction.as_int().to_le_bytes()))?;
+        // reputation_list_id: u32
+        w.write_all(&self.reputation_list_id.to_le_bytes())?;
 
         // inactive: Bool
         w.write_all(u8::from(self.inactive).to_le_bytes().as_slice())?;
@@ -99,4 +65,87 @@ impl crate::Message for CMSG_SET_FACTION_INACTIVE {
 
 #[cfg(feature = "wrath")]
 impl crate::wrath::ClientMessage for CMSG_SET_FACTION_INACTIVE {}
+
+#[cfg(test)]
+mod test {
+    #![allow(clippy::missing_const_for_fn)]
+    use super::CMSG_SET_FACTION_INACTIVE;
+    use super::*;
+    use super::super::*;
+    use crate::wrath::opcodes::ClientOpcodeMessage;
+    use crate::wrath::{ClientMessage, ServerMessage};
+
+    const HEADER_SIZE: usize = 2 + 4;
+    const RAW0: [u8; 11] = [ 0x00, 0x09, 0x17, 0x03, 0x00, 0x00, 0x13, 0x00, 0x00,
+         0x00, 0x01, ];
+
+    pub(crate) fn expected0() -> CMSG_SET_FACTION_INACTIVE {
+        CMSG_SET_FACTION_INACTIVE {
+            reputation_list_id: 0x13,
+            inactive: true, 
+        }
+
+    }
+
+    // Generated from `wow_message_parser/wowm/world/faction/cmsg_set_faction_inactive.wowm` line 16.
+    #[cfg(feature = "sync")]
+    #[cfg_attr(feature = "sync", test)]
+    fn cmsg_set_faction_inactive0() {
+        let expected = expected0();
+        let t = ClientOpcodeMessage::read_unencrypted(&mut std::io::Cursor::new(&RAW0)).unwrap();
+        let t = match t {
+            ClientOpcodeMessage::CMSG_SET_FACTION_INACTIVE(t) => t,
+            opcode => panic!("incorrect opcode. Expected CMSG_SET_FACTION_INACTIVE, got {opcode:#?}"),
+        };
+
+        assert_eq!(&t, &expected);
+        assert_eq!(5 + HEADER_SIZE, RAW0.len());
+
+        let mut dest = Vec::with_capacity(RAW0.len());
+        expected.write_unencrypted_client(&mut std::io::Cursor::new(&mut dest)).unwrap();
+
+        assert_eq!(dest, RAW0);
+    }
+
+    // Generated from `wow_message_parser/wowm/world/faction/cmsg_set_faction_inactive.wowm` line 16.
+    #[cfg(feature = "tokio")]
+    #[cfg_attr(feature = "tokio", tokio::test)]
+    async fn tokio_cmsg_set_faction_inactive0() {
+        let expected = expected0();
+        let t = ClientOpcodeMessage::tokio_read_unencrypted(&mut std::io::Cursor::new(&RAW0)).await.unwrap();
+        let t = match t {
+            ClientOpcodeMessage::CMSG_SET_FACTION_INACTIVE(t) => t,
+            opcode => panic!("incorrect opcode. Expected CMSG_SET_FACTION_INACTIVE, got {opcode:#?}"),
+        };
+
+        assert_eq!(&t, &expected);
+        assert_eq!(5 + HEADER_SIZE, RAW0.len());
+
+        let mut dest = Vec::with_capacity(RAW0.len());
+        expected.tokio_write_unencrypted_client(&mut std::io::Cursor::new(&mut dest)).await.unwrap();
+
+        assert_eq!(dest, RAW0);
+    }
+
+    // Generated from `wow_message_parser/wowm/world/faction/cmsg_set_faction_inactive.wowm` line 16.
+    #[cfg(feature = "async-std")]
+    #[cfg_attr(feature = "async-std", async_std::test)]
+    async fn astd_cmsg_set_faction_inactive0() {
+        let expected = expected0();
+        let t = ClientOpcodeMessage::astd_read_unencrypted(&mut async_std::io::Cursor::new(&RAW0)).await.unwrap();
+        let t = match t {
+            ClientOpcodeMessage::CMSG_SET_FACTION_INACTIVE(t) => t,
+            opcode => panic!("incorrect opcode. Expected CMSG_SET_FACTION_INACTIVE, got {opcode:#?}"),
+        };
+
+        assert_eq!(&t, &expected);
+        assert_eq!(5 + HEADER_SIZE, RAW0.len());
+
+        let mut dest = Vec::with_capacity(RAW0.len());
+        expected.astd_write_unencrypted_client(&mut async_std::io::Cursor::new(&mut dest)).await.unwrap();
+
+        assert_eq!(dest, RAW0);
+    }
+
+}
 
