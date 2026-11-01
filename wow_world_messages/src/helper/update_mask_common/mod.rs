@@ -278,20 +278,57 @@ macro_rules! update_mask {
             GameObject(UpdateGameObject),
             DynamicObject(UpdateDynamicObject),
             Corpse(UpdateCorpse),
+            /// A values update, which carries only the fields that changed. `OBJECT_FIELD_TYPE` never
+            /// changes, so it is not among them, and the kind of object is whatever the receiver
+            /// already knows the guid to be.
+            Untyped(UpdateUntyped),
+        }
+
+        /// The fields of an update that did not say what kind of object it updates.
+        ///
+        /// Read it as the kind the object was created as, with [`Self::into_unit`] and the rest.
+        #[derive(Debug, Hash, Clone, Default, PartialEq, Eq, PartialOrd)]
+        pub struct UpdateUntyped {
+            header: Vec<u32>,
+            values: std::collections::BTreeMap<u16, u32>,
+        }
+
+        impl UpdateUntyped {
+            pub fn into_item(self) -> UpdateItem {
+                UpdateItem::from_inners(self.header, self.values)
+            }
+
+            pub fn into_container(self) -> UpdateContainer {
+                UpdateContainer::from_inners(self.header, self.values)
+            }
+
+            pub fn into_unit(self) -> UpdateUnit {
+                UpdateUnit::from_inners(self.header, self.values)
+            }
+
+            pub fn into_player(self) -> UpdatePlayer {
+                UpdatePlayer::from_inners(self.header, self.values)
+            }
+
+            pub fn into_game_object(self) -> UpdateGameObject {
+                UpdateGameObject::from_inners(self.header, self.values)
+            }
+
+            pub fn into_dynamic_object(self) -> UpdateDynamicObject {
+                UpdateDynamicObject::from_inners(self.header, self.values)
+            }
+
+            pub fn into_corpse(self) -> UpdateCorpse {
+                UpdateCorpse::from_inners(self.header, self.values)
+            }
         }
 
         impl UpdateMask {
             pub(crate) fn read(r: &mut impl std::io::Read) -> Result<Self, std::io::Error> {
                 let (header, values) = $crate::helper::update_mask_common::inners::read_inner(r)?;
 
-                let ty = match values.get(&2) {
-                    None => {
-                        return Err(std::io::Error::new(
-                            std::io::ErrorKind::Other,
-                            "Missing object TYPE",
-                        ))
-                    }
-                    Some(ty) => *ty,
+                let Some(&ty) = values.get(&2) else {
+                    return Ok(Self::Untyped(UpdateUntyped { header, values }));
                 };
 
                 Ok(
@@ -330,6 +367,10 @@ macro_rules! update_mask {
                     UpdateMask::GameObject(i) => i.write_into_vec(v),
                     UpdateMask::DynamicObject(i) => i.write_into_vec(v),
                     UpdateMask::Corpse(i) => i.write_into_vec(v),
+                    // Every field it holds, which is every field it was read with.
+                    UpdateMask::Untyped(i) => $crate::helper::update_mask_common::inners::write_into_vec(
+                        v, &i.header, &i.header, &i.values,
+                    ),
                 }
             }
 
@@ -374,6 +415,12 @@ macro_rules! update_mask {
                     UpdateMask::Corpse(i) => {
                         $crate::helper::update_mask_common::inners::update_mask_size(
                             &i.dirty_mask,
+                            &i.header,
+                        )
+                    }
+                    UpdateMask::Untyped(i) => {
+                        $crate::helper::update_mask_common::inners::update_mask_size(
+                            &i.header,
                             &i.header,
                         )
                     }
