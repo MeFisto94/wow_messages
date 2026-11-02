@@ -78,26 +78,7 @@ smsg SMSG_MONSTER_MOVE = 0x00DD {
     Vector3d spline_point;
     u32 spline_id;
     MonsterMoveType move_type;
-    if (move_type == FACING_TARGET) {
-        Guid target;
-    }
-    else if (move_type == FACING_ANGLE) {
-        f32 angle;
-    }
-    else if (move_type == FACING_SPOT) {
-        Vector3d position;
-    }
-    SplineFlag spline_flags;
-    if (spline_flags & ENTER_CYCLE) {
-        u32 animation_id;
-        u32 animation_start_time;
-    }
-    u32 duration;
-    if (spline_flags & PARABOLIC) {
-        f32 vertical_acceleration;
-        u32 effect_start_time;
-    }
-    MonsterMoveSplines splines;
+    u8[-] spline;
 }
 ```
 ### Header
@@ -120,39 +101,5 @@ SMSG have a header of 4 bytes.
 | - | 12 / - | [Vector3d](vector3d.md) | spline_point |  |
 | - | 4 / Little | u32 | spline_id |  |
 | - | 1 / - | [MonsterMoveType](monstermovetype.md) | move_type |  |
-
-If move_type is equal to `FACING_TARGET`:
-
-| Offset | Size / Endianness | Type | Name | Comment |
-| ------ | ----------------- | ---- | ---- | ------- |
-| - | 8 / Little | [Guid](../types/packed-guid.md) | target |  |
-
-Else If move_type is equal to `FACING_ANGLE`:
-
-| Offset | Size / Endianness | Type | Name | Comment |
-| ------ | ----------------- | ---- | ---- | ------- |
-| - | 4 / Little | f32 | angle |  |
-
-Else If move_type is equal to `FACING_SPOT`:
-
-| Offset | Size / Endianness | Type | Name | Comment |
-| ------ | ----------------- | ---- | ---- | ------- |
-| - | 12 / - | [Vector3d](vector3d.md) | position |  |
-| - | 4 / - | [SplineFlag](splineflag.md) | spline_flags |  |
-
-If spline_flags contains `ENTER_CYCLE`:
-
-| Offset | Size / Endianness | Type | Name | Comment |
-| ------ | ----------------- | ---- | ---- | ------- |
-| - | 4 / Little | u32 | animation_id |  |
-| - | 4 / Little | u32 | animation_start_time |  |
-| - | 4 / Little | u32 | duration |  |
-
-If spline_flags contains `PARABOLIC`:
-
-| Offset | Size / Endianness | Type | Name | Comment |
-| ------ | ----------------- | ---- | ---- | ------- |
-| - | 4 / Little | f32 | vertical_acceleration |  |
-| - | 4 / Little | u32 | effect_start_time |  |
-| - | - / - | [MonsterMoveSpline](../types/monster-move-spline.md) | splines |  |
+| - | ? / - | u8[-] | spline | The rest, in a layout this language cannot state, so left to the reader. TrinityCore:<br/>`MovementMonsterSpline`, written by `MonsterMove::InitializeSplineData`. Nothing for `STOP`.<br/>Otherwise how the unit faces: a `Guid` for `FACING_TARGET`, an `f32` angle for `FACING_ANGLE`<br/>and a `Vector3d` for `FACING_SPOT`. Then the `u32` `SplineFlag`, a `u8` animation tier and a<br/>`u32` start time if they have `ANIMATION`, the `u32` duration in milliseconds, and an `f32`<br/>vertical acceleration and a `u32` start time if they have `PARABOLIC`. Then the path after<br/>`spline_point`: a `u32` count, and for a smooth path (`FLYING` or `CATMULLROM`) that many points<br/>as `Vector3d`. Otherwise the end as a `Vector3d` and each point between as its offset from the<br/>middle of start and end, packed into a `u32` as signed 11, 11 and 10 bits in quarter units. |
 

@@ -156,5 +156,4 @@ The basic type is `u32`, a 4 byte (32 bit) little endian integer.
 
 Used in:
 * [MovementBlock](movementblock.md)
-* [SMSG_MONSTER_MOVE](smsg_monster_move.md)
 * [SMSG_MONSTER_MOVE_TRANSPORT](smsg_monster_move_transport.md)

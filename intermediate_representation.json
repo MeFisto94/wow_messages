@@ -46017,10 +46017,6 @@
             "definer_usage": "InIfStatement"
           },
           {
-            "object_name": "SMSG_MONSTER_MOVE",
-            "definer_usage": "InIfStatement"
-          },
-          {
             "object_name": "SMSG_MONSTER_MOVE_TRANSPORT",
             "definer_usage": "InIfStatement"
           }
@@ -160114,6 +160110,10 @@
           {
             "object_name": "MonsterMove",
             "definer_usage": "InIfStatement"
+          },
+          {
+            "object_name": "SMSG_MONSTER_MOVE",
+            "definer_usage": "RegularUse"
           },
           {
             "object_name": "SMSG_MONSTER_MOVE",
@@ -450795,8 +450795,8 @@
         },
         "sizes": {
           "constant_sized": false,
-          "minimum_size": 31,
-          "maximum_size": 4294967295
+          "minimum_size": 19,
+          "maximum_size": 65562
         },
         "members": [
           {
@@ -450990,477 +450990,32 @@
               "constant_value": null,
               "used_as_size_in": null,
               "size_of_fields_before_size": null,
-              "used_in_if": true,
-              "tags": {}
-            }
-          },
-          {
-            "struct_member_tag": "IfStatement",
-            "struct_member_content": {
-              "variable_name": "move_type",
-              "values": [
-                "FACING_TARGET"
-              ],
-              "members": [
-                {
-                  "struct_member_tag": "Definition",
-                  "struct_member_content": {
-                    "name": "target",
-                    "data_type": {
-                      "data_type_tag": "Guid"
-                    },
-                    "constant_value": null,
-                    "used_as_size_in": null,
-                    "size_of_fields_before_size": null,
-                    "used_in_if": false,
-                    "tags": {}
-                  }
-                }
-              ],
-              "else_if_statements": [
-                {
-                  "variable_name": "move_type",
-                  "values": [
-                    "FACING_ANGLE"
-                  ],
-                  "members": [
-                    {
-                      "struct_member_tag": "Definition",
-                      "struct_member_content": {
-                        "name": "angle",
-                        "data_type": {
-                          "data_type_tag": "FloatingPoint"
-                        },
-                        "constant_value": null,
-                        "used_as_size_in": null,
-                        "size_of_fields_before_size": null,
-                        "used_in_if": false,
-                        "tags": {}
-                      }
-                    }
-                  ],
-                  "else_if_statements": [],
-                  "original_type": {
-                    "data_type_tag": "Enum",
-                    "type_name": "MonsterMoveType",
-                    "integer_type": "U8",
-                    "tags": {
-                      "version": {
-                        "version_type_tag": "world",
-                        "version_type": {
-                          "world_version_tag": "specific",
-                          "versions": [
-                            {
-                              "major": 1,
-                              "minor": 12,
-                              "patch": null,
-                              "build": null
-                            },
-                            {
-                              "major": 2,
-                              "minor": null,
-                              "patch": null,
-                              "build": null
-                            },
-                            {
-                              "major": 3,
-                              "minor": null,
-                              "patch": null,
-                              "build": null
-                            }
-                          ]
-                        }
-                      }
-                    },
-                    "upcast": false
-                  },
-                  "definer_type": "Enum",
-                  "part_of_separate_if_statement": false,
-                  "is_else_if_flag": false
-                },
-                {
-                  "variable_name": "move_type",
-                  "values": [
-                    "FACING_SPOT"
-                  ],
-                  "members": [
-                    {
-                      "struct_member_tag": "Definition",
-                      "struct_member_content": {
-                        "name": "position",
-                        "data_type": {
-                          "data_type_tag": "Struct",
-                          "struct_data": {
-                            "name": "Vector3d",
-                            "object_type": {
-                              "container_type_tag": "Struct"
-                            },
-                            "sizes": {
-                              "constant_sized": true,
-                              "minimum_size": 12,
-                              "maximum_size": 12
-                            },
-                            "members": [
-                              {
-                                "struct_member_tag": "Definition",
-                                "struct_member_content": {
-                                  "name": "x",
-                                  "data_type": {
-                                    "data_type_tag": "FloatingPoint"
-                                  },
-                                  "constant_value": null,
-                                  "used_as_size_in": null,
-                                  "size_of_fields_before_size": null,
-                                  "used_in_if": false,
-                                  "tags": {}
-                                }
-                              },
-                              {
-                                "struct_member_tag": "Definition",
-                                "struct_member_content": {
-                                  "name": "y",
-                                  "data_type": {
-                                    "data_type_tag": "FloatingPoint"
-                                  },
-                                  "constant_value": null,
-                                  "used_as_size_in": null,
-                                  "size_of_fields_before_size": null,
-                                  "used_in_if": false,
-                                  "tags": {}
-                                }
-                              },
-                              {
-                                "struct_member_tag": "Definition",
-                                "struct_member_content": {
-                                  "name": "z",
-                                  "data_type": {
-                                    "data_type_tag": "FloatingPoint"
-                                  },
-                                  "constant_value": null,
-                                  "used_as_size_in": null,
-                                  "size_of_fields_before_size": null,
-                                  "used_in_if": false,
-                                  "tags": {}
-                                }
-                              }
-                            ],
-                            "tags": {
-                              "version": {
-                                "version_type_tag": "world",
-                                "version_type": {
-                                  "world_version_tag": "all"
-                                }
-                              }
-                            },
-                            "tests": [],
-                            "file_info": {
-                              "file_name": "wow_message_parser/wowm/world/vector.wowm",
-                              "start_position": 11,
-                              "end_position": 17
-                            },
-                            "only_has_io_error": true,
-                            "has_manual_size_field": false,
-                            "manual_size_subtraction": null,
-                            "prepared_objects": [
-                              {
-                                "name": "x",
-                                "is_elseif_flag": false,
-                                "enum_part_of_separate_statements": false
-                              },
-                              {
-                                "name": "y",
-                                "is_elseif_flag": false,
-                                "enum_part_of_separate_statements": false
-                              },
-                              {
-                                "name": "z",
-                                "is_elseif_flag": false,
-                                "enum_part_of_separate_statements": false
-                              }
-                            ],
-                            "optional": null
-                          }
-                        },
-                        "constant_value": null,
-                        "used_as_size_in": null,
-                        "size_of_fields_before_size": null,
-                        "used_in_if": false,
-                        "tags": {}
-                      }
-                    }
-                  ],
-                  "else_if_statements": [],
-                  "original_type": {
-                    "data_type_tag": "Enum",
-                    "type_name": "MonsterMoveType",
-                    "integer_type": "U8",
-                    "tags": {
-                      "version": {
-                        "version_type_tag": "world",
-                        "version_type": {
-                          "world_version_tag": "specific",
-                          "versions": [
-                            {
-                              "major": 1,
-                              "minor": 12,
-                              "patch": null,
-                              "build": null
-                            },
-                            {
-                              "major": 2,
-                              "minor": null,
-                              "patch": null,
-                              "build": null
-                            },
-                            {
-                              "major": 3,
-                              "minor": null,
-                              "patch": null,
-                              "build": null
-                            }
-                          ]
-                        }
-                      }
-                    },
-                    "upcast": false
-                  },
-                  "definer_type": "Enum",
-                  "part_of_separate_if_statement": false,
-                  "is_else_if_flag": false
-                }
-              ],
-              "original_type": {
-                "data_type_tag": "Enum",
-                "type_name": "MonsterMoveType",
-                "integer_type": "U8",
-                "tags": {
-                  "version": {
-                    "version_type_tag": "world",
-                    "version_type": {
-                      "world_version_tag": "specific",
-                      "versions": [
-                        {
-                          "major": 1,
-                          "minor": 12,
-                          "patch": null,
-                          "build": null
-                        },
-                        {
-                          "major": 2,
-                          "minor": null,
-                          "patch": null,
-                          "build": null
-                        },
-                        {
-                          "major": 3,
-                          "minor": null,
-                          "patch": null,
-                          "build": null
-                        }
-                      ]
-                    }
-                  }
-                },
-                "upcast": false
-              },
-              "definer_type": "Enum",
-              "part_of_separate_if_statement": false,
-              "is_else_if_flag": false
-            }
-          },
-          {
-            "struct_member_tag": "Definition",
-            "struct_member_content": {
-              "name": "spline_flags",
-              "data_type": {
-                "data_type_tag": "Flag",
-                "type_name": "SplineFlag",
-                "integer_type": "U32",
-                "tags": {
-                  "version": {
-                    "version_type_tag": "world",
-                    "version_type": {
-                      "world_version_tag": "specific",
-                      "versions": [
-                        {
-                          "major": 3,
-                          "minor": 3,
-                          "patch": 5,
-                          "build": null
-                        }
-                      ]
-                    }
-                  }
-                },
-                "upcast": false
-              },
-              "constant_value": null,
-              "used_as_size_in": null,
-              "size_of_fields_before_size": null,
-              "used_in_if": true,
-              "tags": {}
-            }
-          },
-          {
-            "struct_member_tag": "IfStatement",
-            "struct_member_content": {
-              "variable_name": "spline_flags",
-              "values": [
-                "ENTER_CYCLE"
-              ],
-              "members": [
-                {
-                  "struct_member_tag": "Definition",
-                  "struct_member_content": {
-                    "name": "animation_id",
-                    "data_type": {
-                      "data_type_tag": "Integer",
-                      "integer_type": "U32"
-                    },
-                    "constant_value": null,
-                    "used_as_size_in": null,
-                    "size_of_fields_before_size": null,
-                    "used_in_if": false,
-                    "tags": {}
-                  }
-                },
-                {
-                  "struct_member_tag": "Definition",
-                  "struct_member_content": {
-                    "name": "animation_start_time",
-                    "data_type": {
-                      "data_type_tag": "Integer",
-                      "integer_type": "U32"
-                    },
-                    "constant_value": null,
-                    "used_as_size_in": null,
-                    "size_of_fields_before_size": null,
-                    "used_in_if": false,
-                    "tags": {}
-                  }
-                }
-              ],
-              "else_if_statements": [],
-              "original_type": {
-                "data_type_tag": "Flag",
-                "type_name": "SplineFlag",
-                "integer_type": "U32",
-                "tags": {
-                  "version": {
-                    "version_type_tag": "world",
-                    "version_type": {
-                      "world_version_tag": "specific",
-                      "versions": [
-                        {
-                          "major": 3,
-                          "minor": 3,
-                          "patch": 5,
-                          "build": null
-                        }
-                      ]
-                    }
-                  }
-                },
-                "upcast": false
-              },
-              "definer_type": "Flag",
-              "part_of_separate_if_statement": false,
-              "is_else_if_flag": false
-            }
-          },
-          {
-            "struct_member_tag": "Definition",
-            "struct_member_content": {
-              "name": "duration",
-              "data_type": {
-                "data_type_tag": "Integer",
-                "integer_type": "U32"
-              },
-              "constant_value": null,
-              "used_as_size_in": null,
-              "size_of_fields_before_size": null,
               "used_in_if": false,
               "tags": {}
             }
           },
           {
-            "struct_member_tag": "IfStatement",
-            "struct_member_content": {
-              "variable_name": "spline_flags",
-              "values": [
-                "PARABOLIC"
-              ],
-              "members": [
-                {
-                  "struct_member_tag": "Definition",
-                  "struct_member_content": {
-                    "name": "vertical_acceleration",
-                    "data_type": {
-                      "data_type_tag": "FloatingPoint"
-                    },
-                    "constant_value": null,
-                    "used_as_size_in": null,
-                    "size_of_fields_before_size": null,
-                    "used_in_if": false,
-                    "tags": {}
-                  }
-                },
-                {
-                  "struct_member_tag": "Definition",
-                  "struct_member_content": {
-                    "name": "effect_start_time",
-                    "data_type": {
-                      "data_type_tag": "Integer",
-                      "integer_type": "U32"
-                    },
-                    "constant_value": null,
-                    "used_as_size_in": null,
-                    "size_of_fields_before_size": null,
-                    "used_in_if": false,
-                    "tags": {}
-                  }
-                }
-              ],
-              "else_if_statements": [],
-              "original_type": {
-                "data_type_tag": "Flag",
-                "type_name": "SplineFlag",
-                "integer_type": "U32",
-                "tags": {
-                  "version": {
-                    "version_type_tag": "world",
-                    "version_type": {
-                      "world_version_tag": "specific",
-                      "versions": [
-                        {
-                          "major": 3,
-                          "minor": 3,
-                          "patch": 5,
-                          "build": null
-                        }
-                      ]
-                    }
-                  }
-                },
-                "upcast": false
-              },
-              "definer_type": "Flag",
-              "part_of_separate_if_statement": false,
-              "is_else_if_flag": false
-            }
-          },
-          {
             "struct_member_tag": "Definition",
             "struct_member_content": {
-              "name": "splines",
+              "name": "spline",
               "data_type": {
-                "data_type_tag": "MonsterMoveSpline"
+                "data_type_tag": "Array",
+                "inner_type": {
+                  "array_type_tag": "Integer",
+                  "integer_type": "U8"
+                },
+                "size": {
+                  "array_size_tag": "Endless"
+                },
+                "compressed": false
               },
               "constant_value": null,
               "used_as_size_in": null,
               "size_of_fields_before_size": null,
               "used_in_if": false,
-              "tags": {}
+              "tags": {
+                "comment": "The rest, in a layout this language cannot state, so left to the reader. TrinityCore:\n`MovementMonsterSpline`, written by `MonsterMove::InitializeSplineData`. Nothing for `STOP`.\nOtherwise how the unit faces: a `Guid` for `FACING_TARGET`, an `f32` angle for `FACING_ANGLE`\nand a `Vector3d` for `FACING_SPOT`. Then the `u32` `SplineFlag`, a `u8` animation tier and a\n`u32` start time if they have `ANIMATION`, the `u32` duration in milliseconds, and an `f32`\nvertical acceleration and a `u32` start time if they have `PARABOLIC`. Then the path after\n`spline_point`: a `u32` count, and for a smooth path (`FLYING` or `CATMULLROM`) that many points\nas `Vector3d`. Otherwise the end as a `Vector3d` and each point between as its offset from the\nmiddle of start and end, packed into a `u32` as signed 11, 11 and 10 bits in quarter units."
+              }
             }
           }
         ],
@@ -451484,7 +451039,7 @@
         "file_info": {
           "file_name": "wow_message_parser/wowm/world/movement/smsg/smsg_monster_move.wowm",
           "start_position": 31,
-          "end_position": 59
+          "end_position": 50
         },
         "only_has_io_error": false,
         "has_manual_size_field": false,
@@ -451512,72 +451067,12 @@
           },
           {
             "name": "move_type",
-            "enumerators": {
-              "FACING_ANGLE": [
-                {
-                  "name": "angle",
-                  "is_elseif_flag": false,
-                  "enum_part_of_separate_statements": false
-                }
-              ],
-              "FACING_SPOT": [
-                {
-                  "name": "position",
-                  "is_elseif_flag": false,
-                  "enum_part_of_separate_statements": false
-                }
-              ],
-              "FACING_TARGET": [
-                {
-                  "name": "target",
-                  "is_elseif_flag": false,
-                  "enum_part_of_separate_statements": false
-                }
-              ]
-            },
             "is_elseif_flag": false,
             "enum_part_of_separate_statements": false,
             "definer_type": "Enum"
           },
           {
-            "name": "spline_flags",
-            "enumerators": {
-              "ENTER_CYCLE": [
-                {
-                  "name": "animation_id",
-                  "is_elseif_flag": false,
-                  "enum_part_of_separate_statements": false
-                },
-                {
-                  "name": "animation_start_time",
-                  "is_elseif_flag": false,
-                  "enum_part_of_separate_statements": false
-                }
-              ],
-              "PARABOLIC": [
-                {
-                  "name": "effect_start_time",
-                  "is_elseif_flag": false,
-                  "enum_part_of_separate_statements": false
-                },
-                {
-                  "name": "vertical_acceleration",
-                  "is_elseif_flag": false,
-                  "enum_part_of_separate_statements": false
-                }
-              ]
-            },
-            "is_elseif_flag": false,
-            "enum_part_of_separate_statements": false,
-            "definer_type": "Flag"
-          },
-          {
-            "name": "duration",
-            "is_elseif_flag": false,
-            "enum_part_of_separate_statements": false
-          },
-          {
-            "name": "splines",
+            "name": "spline",
             "is_elseif_flag": false,
             "enum_part_of_separate_statements": false
           }

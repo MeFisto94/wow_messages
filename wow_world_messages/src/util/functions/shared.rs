@@ -67,10 +67,12 @@ pub(crate) fn vector3d_to_packed(v: &Vector3d) -> i32 {
     packed
 }
 
+/// The inverse of [`vector3d_to_packed`]: each field is signed, in quarter units.
 pub(crate) const fn packed_to_vector3d(p: i32) -> Vector3d {
-    let x = ((p & 0x7FF) / 4) as f32;
-    let y = (((p >> 11) & 0x7FF) / 4) as f32;
-    let z = (((p >> 22) & 0x3FF) / 4) as f32;
+    // Shifted to the top of the word and back, which sign extends the field.
+    let x = ((p << 21) >> 21) as f32 * 0.25;
+    let y = ((p << 10) >> 21) as f32 * 0.25;
+    let z = (p >> 22) as f32 * 0.25;
 
     Vector3d { x, y, z }
 }
